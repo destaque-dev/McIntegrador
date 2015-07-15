@@ -22,8 +22,11 @@ https://s3.amazonaws.com/helpscout.net/docs/assets/54743955e4b0f6394183bb9e/atta
 Necessário configurar dentro do BAT:
 
 Caminho do prunsrv.exe (PR_INSTALL)
+
 Caminho dos logs (PR_LOGPATH)
+
 Caminho do McIntegrador.jar gerado (PR_CLASSPATH)
+
 Caminho do jvm.dll do java no servidor. (PR_JVM) (Necessário Java 5 ou superior)
 
 Obs: O prunsrv.exe da pasta raiz do rar executa somente para java de 32 bits. Para versões 64 bits necessário escolher versão AMD ou IA (Intel).
@@ -31,4 +34,6 @@ Obs: O prunsrv.exe da pasta raiz do rar executa somente para java de 32 bits. Pa
 Obs2: Para apagar o serviço (caso tenha sido criado errado), executar sc delete McIntegrador
 
 Obs3: Para mais detalhes e informações, visitar:
-http://joerglenhard.wordpress.com/2012/05/29/build-windows-service-from-java-application-with-procrun/ http://commons.apache.org/proper/commons-daemon/procrun.html
+http://joerglenhard.wordpress.com/2012/05/29/build-windows-service-from-java-application-with-procrun/
+
+http://commons.apache.org/proper/commons-daemon/procrun.html
