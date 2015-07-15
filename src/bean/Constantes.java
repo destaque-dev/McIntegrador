@@ -42,4 +42,6 @@ public class Constantes {
 
     public static int NIVEL_CASO_JURIDICO = 2;
 
+    public static String URL_MCFILE = "https://mcfile.eu/mcfile/";
+
 }

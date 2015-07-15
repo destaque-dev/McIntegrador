@@ -187,6 +187,9 @@ public class Configuracao {
 
     public String getUrlMcFile() {
 
+        if (urlMcFile == null) {
+            return Constantes.URL_MCFILE;
+        }
         return urlMcFile;
     }
 

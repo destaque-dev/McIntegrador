@@ -1,13 +1,24 @@
 package bean;
 
-public class TipoStatus {
+public enum TipoStatus {
 
-    public static String ADICIONADO = "'A'";
+    ADICIONADO("A"), MODIFICADO("A"), REMOVIDO("A"), IMPORTADO("A");
 
-    public static String MODIFICADO = "'M'";
+    private String status;
 
-    public static String REMOVIDO = "'R'";
+    private TipoStatus(String status) {
 
-    public static String IMPORTADO = "'I'";
+        this.status = status;
+    }
+
+    public String getStatus() {
+
+        return status;
+    }
+
+    public void setStatus(String status) {
+
+        this.status = status;
+    }
 
 }
