@@ -12,8 +12,8 @@ import bean.DocumentoBean;
 import bean.ParametroAvancado;
 import bean.TipoStatus;
 import bean.ValorCampoBean;
-import bean.juridico.CasoBean;
-import bean.juridico.ClienteBean;
+import bean.padrao.CasoBean;
+import bean.padrao.ClienteBean;
 import exception.BDException;
 import exception.IntegradorException;
 
