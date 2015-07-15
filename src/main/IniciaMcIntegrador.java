@@ -61,11 +61,6 @@ public class IniciaMcIntegrador {
         return integrador;
     }
 
-    public static IntegradorMcFile montaIntegrador() {
-
-        return null;
-    }
-
     public static void stop(String[] args) {
 
         Log.info("Parando McIntegrador");
@@ -84,6 +79,11 @@ public class IniciaMcIntegrador {
     public static boolean isStop() {
 
         return stop;
+    }
+
+    public static IntegradorMcFile montaIntegrador() {
+
+        return null;
     }
 
 }
