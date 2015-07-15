@@ -5,8 +5,6 @@ Para utilizar o McIntegrador é necessário 3 passos.
 
 ###2 - Criar classe de integração###
 
-####Integração por banco de dados####
-
 Extender classe IntegradorBase e implementar os métodos abstratos obrigatórios. Para mais informações sobre os métodos, consultar o JavaDoc.
 
 Após a criação da classe, necessário instanciá-la e retorná-la no método montaIntegrador() dentro da Classe IniciaMcIntegrador.
