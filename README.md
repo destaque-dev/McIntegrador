@@ -15,9 +15,9 @@ Após a criação da classe, necessário instanciá-la e retorná-la no método 
 
 Gerar um runnable jar do projeto com a opção “extract required libraries into generated jar”. Importante mencionar que o integrador.properties pode ficar dentro do jar (no pacote util) ou do lado de fora na mesma pasta. O programa tenta buscar primeiramente do lado de fora, se não achar procura dentro.
 
-Após isso, para iniciar o mesmo como um serviço basta configurar e executar .bat existente no rar abaixo. (Em linha de comando em modo de administrador)
+Após isso, para iniciar o mesmo como um serviço basta configurar e executar .bat existente <a href='https://s3.amazonaws.com/helpscout.net/docs/assets/54743955e4b0f6394183bb9e/attachments/55a6bdd9e4b03e788eda3916/apache_commons_daemon.rar'>neste RAR</a>. (Em linha de comando em modo de administrador)
 
-<a href='https://s3.amazonaws.com/helpscout.net/docs/assets/54743955e4b0f6394183bb9e/attachments/55a6bdd9e4b03e788eda3916/apache_commons_daemon.rar'>Download do rar</a>
+
 
 Necessário configurar dentro do BAT:
 
