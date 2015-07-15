@@ -3,6 +3,8 @@ Para utilizar o McIntegrador é necessário 3 passos.
 
 ###1 - Configurar arquivo integrador.properties###
 
+Arquivo com as informações necessárias para a integração: acesso ao banco de dados e ao McFile. Fica dentro do pacote util do projeto.
+
 ###2 - Criar classe de integração###
 
 Extender classe IntegradorBase e implementar os métodos abstratos obrigatórios. Para mais informações sobre os métodos, consultar o JavaDoc.
