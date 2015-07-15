@@ -1,7 +1,7 @@
 package util;
 
 import integracao.IntegradorMcFile;
-import integracao.IntegradorPadraoTabela;
+import integracao.IntegradorBase;
 
 import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
@@ -99,9 +99,9 @@ public class Funcoes {
             } else {
                 Log.error("Erro em McIntegrador", e);
             }
-        } else if (e instanceof BDException && integrador instanceof IntegradorPadraoTabela) {
+        } else if (e instanceof BDException && integrador instanceof IntegradorBase) {
             try {
-                ((IntegradorPadraoTabela) integrador).conectaBancoDados();
+                ((IntegradorBase) integrador).conectaBancoDados();
             } catch (Exception e1) {
                 Log.error("Falha ao reconectar ao banco de dados", e);
             }
