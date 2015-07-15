@@ -34,6 +34,5 @@ Obs: O prunsrv.exe da pasta raiz do rar executa somente para java de 32 bits. Pa
 Obs2: Para apagar o serviço (caso tenha sido criado errado), executar sc delete McIntegrador
 
 Obs3: Para mais detalhes e informações, visitar:
-http://joerglenhard.wordpress.com/2012/05/29/build-windows-service-from-java-application-with-procrun/
-
-http://commons.apache.org/proper/commons-daemon/procrun.html
+  http://joerglenhard.wordpress.com/2012/05/29/build-windows-service-from-java-application-with-procrun/
+  http://commons.apache.org/proper/commons-daemon/procrun.html
