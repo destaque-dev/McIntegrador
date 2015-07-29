@@ -9,9 +9,9 @@ import bean.padrao.AssuntoBean;
 import bean.padrao.ClienteBean;
 import exception.BDException;
 
-public class IntegradorJuridico extends IntegradorBase {
+public class IntegradorExemplo extends IntegradorBase {
 
-    public IntegradorJuridico() throws Exception {
+    public IntegradorExemplo() throws Exception {
 
         super();
     }
