@@ -20,8 +20,6 @@ public class ConexaoIntegrador {
         String tipoBD = Configuracao.getInstance().getTipoBD();
         int intTipoBD = TipoBD.validacao(tipoBD);
 
-        System.out.println("Tipo BD " + intTipoBD);
-
         try {
             Class.forName(getDriver(intTipoBD));
             String url = getUrl(intTipoBD, Configuracao.getInstance().getHost(), Configuracao.getInstance().getPorta(),
@@ -133,7 +131,7 @@ public class ConexaoIntegrador {
      * utilizando a notação de parâmetros, e seus parametros deverão ser passados na ordem de
      * preenchimento na query. Ex: sql = 'update TABELA set CAMPO1 = ? where CAMPO2 = ?';
      * executeQuery(sql, VALOR_CAMPO1, VALOR_CAMPO2);
-     * 
+     *
      * @param sql
      *            Query de insert a ser executada
      * @param parametros

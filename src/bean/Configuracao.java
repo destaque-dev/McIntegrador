@@ -16,27 +16,13 @@ public class Configuracao {
 
     private String dataBase;
 
-    private String nomeTabelaClienteJuridico;
-
-    private String nomeTabelaCaso;
-
     private String login;
 
     private String senha;
 
-    private String area;
-
     private String loginMcFile;
 
     private String senhaMcFile;
-
-    private String urlMcFile;
-
-    private String tipoModelagem;
-
-    private String tipoIntegracao;
-
-    private String cliente;
 
     private Configuracao() throws Exception {
 
@@ -57,26 +43,10 @@ public class Configuracao {
             porta = bundle.getString("porta");
             tipoBD = bundle.getString("tipoBD");
             dataBase = bundle.getString("dataBase");
-            nomeTabelaClienteJuridico = bundle.getString("nomeTabelaClienteJuridico");
-            nomeTabelaCaso = bundle.getString("nomeTabelaCaso");
             login = bundle.getString("login");
             senha = bundle.getString("senha");
-            area = bundle.getString("area");
             loginMcFile = bundle.getString("loginMcFile");
             senhaMcFile = bundle.getString("senhaMcFile");
-            urlMcFile = bundle.getString("urlMcFile");
-
-            try {
-                tipoModelagem = bundle.getString("tipoModelagem");
-            } catch (MissingResourceException e) {
-            }
-
-            try {
-                tipoIntegracao = bundle.getString("tipoIntegracao");
-            } catch (MissingResourceException e) {
-            }
-
-            cliente = bundle.getString("cliente");
 
         } catch (Exception e) {
             Log.error("Erro iniciando properties", e);
@@ -155,16 +125,6 @@ public class Configuracao {
         this.senha = senha;
     }
 
-    public String getArea() {
-
-        return area;
-    }
-
-    public void setArea(String area) {
-
-        this.area = area;
-    }
-
     public String getLoginMcFile() {
 
         return loginMcFile;
@@ -183,69 +143,6 @@ public class Configuracao {
     public void setSenhaMcFile(String senhaMcFile) {
 
         this.senhaMcFile = senhaMcFile;
-    }
-
-    public String getUrlMcFile() {
-
-        if (urlMcFile == null) {
-            return Constantes.URL_MCFILE;
-        }
-        return urlMcFile;
-    }
-
-    public void setUrlMcFile(String urlMcFile) {
-
-        this.urlMcFile = urlMcFile;
-    }
-
-    public String getTipoModelagem() {
-
-        return tipoModelagem;
-    }
-
-    public void setTipoModelagem(String tipoModelagem) {
-
-        this.tipoModelagem = tipoModelagem;
-    }
-
-    public String getTipoIntegracao() {
-
-        return tipoIntegracao;
-    }
-
-    public void setTipoIntegracao(String tipoIntegracao) {
-
-        this.tipoIntegracao = tipoIntegracao;
-    }
-
-    public String getNomeTabelaClienteJuridico() {
-
-        return nomeTabelaClienteJuridico;
-    }
-
-    public void setNomeTabelaClienteJuridico(String nomeTabelaClienteJuridico) {
-
-        this.nomeTabelaClienteJuridico = nomeTabelaClienteJuridico;
-    }
-
-    public String getNomeTabelaCaso() {
-
-        return nomeTabelaCaso;
-    }
-
-    public void setNomeTabelaCaso(String nomeTabelaCaso) {
-
-        this.nomeTabelaCaso = nomeTabelaCaso;
-    }
-
-    public String getCliente() {
-
-        return cliente;
-    }
-
-    public void setCliente(String cliente) {
-
-        this.cliente = cliente;
     }
 
 }

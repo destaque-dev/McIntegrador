@@ -1,12 +1,12 @@
 package bean.padrao;
 
-public class CasoBean {
+public class AssuntoBean {
 
     public static int COD_TIPO_DOC = 236;
 
-    private int codCaso;
+    private int codAssunto;
 
-    private String nomeCaso;
+    private String nomeAssunto;
 
     private int codCliente;
 
@@ -14,7 +14,7 @@ public class CasoBean {
 
     private String numProcesso;
 
-    private String tipoCaso;
+    private String tipoAssunto;
 
     private String tipoAcao;
 
@@ -26,24 +26,24 @@ public class CasoBean {
 
     private String partePrincipal;
 
-    public int getCodCaso() {
+    public int getCodassunto() {
 
-        return codCaso;
+        return codAssunto;
     }
 
-    public void setCodCaso(int codCaso) {
+    public void setCodAssunto(int codassunto) {
 
-        this.codCaso = codCaso;
+        this.codAssunto = codassunto;
     }
 
-    public String getNomeCaso() {
+    public String getNomeAssunto() {
 
-        return nomeCaso;
+        return nomeAssunto;
     }
 
-    public void setNomeCaso(String nomeCaso) {
+    public void setNomeassunto(String nomeassunto) {
 
-        this.nomeCaso = nomeCaso;
+        this.nomeAssunto = nomeassunto;
     }
 
     public int getCodCliente() {
@@ -76,14 +76,14 @@ public class CasoBean {
         this.numProcesso = numProcesso;
     }
 
-    public String getTipoCaso() {
+    public String getTipoAssunto() {
 
-        return tipoCaso;
+        return tipoAssunto;
     }
 
-    public void setTipoCaso(String tipoCaso) {
+    public void setTipoAssunto(String tipoassunto) {
 
-        this.tipoCaso = tipoCaso;
+        this.tipoAssunto = tipoassunto;
     }
 
     public String getTipoAcao() {

@@ -2,7 +2,7 @@ package bean;
 
 public enum TipoStatus {
 
-    ADICIONADO("A"), MODIFICADO("A"), REMOVIDO("A"), IMPORTADO("A");
+    ADICIONADO("A"), MODIFICADO("M"), REMOVIDO("R"), IMPORTADO("I");
 
     private String status;
 

@@ -1,5 +1,6 @@
 package main;
 
+import integracao.IntegradorJuridico;
 import integracao.IntegradorMcFile;
 import util.Funcoes;
 import util.Log;
@@ -81,9 +82,9 @@ public class IniciaMcIntegrador {
         return stop;
     }
 
-    public static IntegradorMcFile montaIntegrador() {
+    public static IntegradorMcFile montaIntegrador() throws Exception {
 
-        return null;
+        return new IntegradorJuridico();
     }
 
 }

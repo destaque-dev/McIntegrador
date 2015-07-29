@@ -27,12 +27,12 @@ public abstract class IntegradorMcFile {
 
     /**
      * Loga no McFile
-     * 
+     *
      * @throws Exception
      */
     public void loginMcFile() throws Exception {
 
-        String urlEnviaEmail = configuracao.getUrlMcFile() + Constantes.CTRL_SERVICOS;
+        String urlEnviaEmail = Constantes.URL_MCFILE + Constantes.CTRL_SERVICOS;
 
         Connection con = Jsoup.connect(urlEnviaEmail);
 
@@ -56,28 +56,28 @@ public abstract class IntegradorMcFile {
 
     /**
      * Verifica novos registros a serem inseridos na base e os insere, caso encontre
-     * 
+     *
      * @throws Exception
      */
     public abstract void verificaRegistrosNovos() throws Exception;
 
     /**
      * Verifica registros a serem inseridos na base e os atualiza, caso encontre
-     * 
+     *
      * @throws Exception
      */
     public abstract void verificaRegistrosAtualizados() throws Exception;
 
     /**
      * Verifica registros a serem inseridos na base e os atualiza, caso encontre
-     * 
+     *
      * @throws Exception
      */
     public abstract void verificaRegistrosRemovidos() throws Exception;
 
     /**
      * Invoca McFile API para pesquisar no McFile
-     * 
+     *
      * @param parametros
      *            parametros de pesquisa
      * @param level
@@ -90,7 +90,7 @@ public abstract class IntegradorMcFile {
     protected DocumentoBean[] chamaPesquisaMcFile(List<ParametroAvancado> parametros, int level, int treeID,
             Integer codPai) throws IOException {
 
-        String url = configuracao.getUrlMcFile() + Constantes.CTRL_SERVICOS;
+        String url = Constantes.URL_MCFILE + Constantes.CTRL_SERVICOS;
 
         Connection con = Jsoup.connect(url);
 
@@ -118,14 +118,14 @@ public abstract class IntegradorMcFile {
 
     /**
      * Invoca McFile API para inserir um documento no McFile
-     * 
+     *
      * @param listaCampos
      * @return
      * @throws Exception
      */
     protected int chamaInsereDocumentoMcFile(List<ValorCampoBean> listaCampos) throws Exception {
 
-        String url = configuracao.getUrlMcFile() + Constantes.CTRL_SERVICOS;
+        String url = Constantes.URL_MCFILE + Constantes.CTRL_SERVICOS;
 
         Connection con = Jsoup.connect(url);
 
@@ -146,7 +146,7 @@ public abstract class IntegradorMcFile {
 
     /**
      * Invoca McFile API para atulizar um documento no McFile
-     * 
+     *
      * @param codDoc
      * @param listaCampos
      * @return
@@ -155,7 +155,7 @@ public abstract class IntegradorMcFile {
     protected void chamaAtualizaDocumentoMcFile(int codDoc, int codTipoDoc, List<ValorCampoBean> listaCampos)
             throws Exception {
 
-        String url = configuracao.getUrlMcFile() + Constantes.CTRL_SERVICOS;
+        String url = Constantes.URL_MCFILE + Constantes.CTRL_SERVICOS;
 
         Connection con = Jsoup.connect(url);
 

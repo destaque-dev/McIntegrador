@@ -10,6 +10,12 @@ public class ClienteBean {
 
     private String nomeFantasia;
 
+    private String cnpj;
+
+    private String tipoCliente;
+
+    private String tipoPessoa;
+
     public int getCodCliente() {
 
         return codCliente;
@@ -39,4 +45,35 @@ public class ClienteBean {
 
         this.nomeFantasia = nomeFantasia;
     }
+
+    public String getCnpj() {
+
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+
+        this.cnpj = cnpj;
+    }
+
+    public String getTipoCliente() {
+
+        return tipoCliente;
+    }
+
+    public void setTipoCliente(String tipoCliente) {
+
+        this.tipoCliente = tipoCliente;
+    }
+
+    public String getTipoPessoa() {
+
+        return tipoPessoa;
+    }
+
+    public void setTipoPessoa(String tipoPessoa) {
+
+        this.tipoPessoa = tipoPessoa;
+    }
+
 }

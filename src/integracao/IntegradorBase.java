@@ -12,7 +12,7 @@ import bean.DocumentoBean;
 import bean.ParametroAvancado;
 import bean.TipoStatus;
 import bean.ValorCampoBean;
-import bean.padrao.CasoBean;
+import bean.padrao.AssuntoBean;
 import bean.padrao.ClienteBean;
 import exception.BDException;
 import exception.IntegradorException;
@@ -45,21 +45,23 @@ public abstract class IntegradorBase extends IntegradorMcFile {
     }
 
     /**
-     * Adiciona caso encontrado
+     * Adiciona assunto encontrado
      *
-     * @param casoBean
+     * @param assuntoBean
      * @throws Exception
      */
-    protected void adicionaCaso(CasoBean casoBean) throws BDException, Exception {
+    protected void adicionaAssunto(AssuntoBean assuntoBean) throws Exception {
 
         iniciaTransacao();
         try {
-            casoIntegrado(casoBean.getCodCaso());
-            insereCasoMcFile(casoBean);
+            assuntoIntegrado(assuntoBean.getCodassunto());
+            insereassuntoMcFile(assuntoBean);
             commit();
-            Log.info("Caso " + casoBean.getCodCaso() + " do cliente " + casoBean.getCodCliente() + "  inserido");
+            Log.info("assunto " + assuntoBean.getCodassunto() + " do cliente " + assuntoBean.getCodCliente()
+                    + "  inserido");
         } catch (Exception e) {
             rollback();
+            throw e;
         }
     }
 
@@ -69,7 +71,7 @@ public abstract class IntegradorBase extends IntegradorMcFile {
      * @param clienteJuridicoBean
      * @throws Exception
      */
-    protected void adicionaCliente(ClienteBean clienteJuridicoBean) throws BDException, Exception {
+    protected void adicionaCliente(ClienteBean clienteJuridicoBean) throws Exception {
 
         iniciaTransacao();
         try {
@@ -79,29 +81,32 @@ public abstract class IntegradorBase extends IntegradorMcFile {
             Log.info("Cliente " + clienteJuridicoBean.getCodCliente() + " inserido");
         } catch (Exception e) {
             rollback();
+            throw e;
         }
     }
 
-    protected void atualizaCaso(CasoBean casoBean) throws BDException, Exception {
+    protected void atualizaassunto(AssuntoBean assuntoBean) throws Exception {
 
         iniciaTransacao();
         try {
-            casoIntegrado(casoBean.getCodCaso());
-            atualizaCasoMcFile(casoBean);
+            assuntoIntegrado(assuntoBean.getCodassunto());
+            atualizaassuntoMcFile(assuntoBean);
             commit();
-            Log.info("Caso " + casoBean.getCodCaso() + " do cliente " + casoBean.getCodCliente() + "  atualizado");
+            Log.info("assunto " + assuntoBean.getCodassunto() + " do cliente " + assuntoBean.getCodCliente()
+                    + "  atualizado");
         } catch (Exception e) {
             rollback();
+            throw e;
         }
     }
 
     /**
      * Atualiza cliente encontrado
      *
-     * @param casoBean
+     * @param assuntoBean
      * @throws Exception
      */
-    protected void atualizaCliente(ClienteBean clienteJuridicoBean) throws BDException, Exception {
+    protected void atualizaCliente(ClienteBean clienteJuridicoBean) throws Exception {
 
         iniciaTransacao();
         try {
@@ -111,25 +116,28 @@ public abstract class IntegradorBase extends IntegradorMcFile {
             Log.info("Cliente " + clienteJuridicoBean.getCodCliente() + " atualizado");
         } catch (Exception e) {
             rollback();
+            throw e;
         }
     }
 
     /**
-     * Remove caso encontrado
+     * Remove assunto encontrado
      *
-     * @param casoBean
+     * @param assuntoBean
      * @throws Exception
      */
-    protected void removeCaso(CasoBean casoBean) throws Exception {
+    protected void removeassunto(AssuntoBean assuntoBean) throws Exception {
 
         iniciaTransacao();
         try {
-            casoIntegrado(casoBean.getCodCaso());
-            removeCasoMcFile(casoBean);
+            assuntoIntegrado(assuntoBean.getCodassunto());
+            removeassuntoMcFile(assuntoBean);
             commit();
-            Log.info("Caso " + casoBean.getCodCaso() + " do cliente " + casoBean.getCodCliente() + "  removido");
+            Log.info("assunto " + assuntoBean.getCodassunto() + " do cliente " + assuntoBean.getCodCliente()
+                    + "  removido");
         } catch (Exception e) {
             rollback();
+            throw e;
         }
 
     }
@@ -150,18 +158,19 @@ public abstract class IntegradorBase extends IntegradorMcFile {
             Log.info("Cliente " + clienteJuridicoBean.getCodCliente() + " removido");
         } catch (Exception e) {
             rollback();
+            throw e;
         }
 
     }
 
     /**
-     * Efetua procedimento para informar que o caso foi integrado com sucesso
+     * Efetua procedimento para informar que o assunto foi integrado com sucesso
      *
      * @param nomeTabela
      * @param codigo
      * @throws BDException
      */
-    protected abstract void casoIntegrado(int codigo) throws BDException;
+    protected abstract void assuntoIntegrado(int codigo) throws BDException;
 
     /**
      * Efetua procedimento para informar que cliente foi integrado com sucesso
@@ -212,12 +221,12 @@ public abstract class IntegradorBase extends IntegradorMcFile {
             }
         }
 
-        List<CasoBean> casos = getCasos(TipoStatus.ADICIONADO);
-        if (casos.size() > 0) {
-            Log.info("Casos novos encontrados: " + casos.size());
+        List<AssuntoBean> assuntos = getAssuntos(TipoStatus.ADICIONADO);
+        if (assuntos.size() > 0) {
+            Log.info("assuntos novos encontrados: " + assuntos.size());
 
-            for (CasoBean casoBean : casos) {
-                adicionaCaso(casoBean);
+            for (AssuntoBean assuntoBean : assuntos) {
+                adicionaAssunto(assuntoBean);
             }
         }
 
@@ -235,12 +244,12 @@ public abstract class IntegradorBase extends IntegradorMcFile {
             }
         }
 
-        List<CasoBean> casos = getCasos(TipoStatus.MODIFICADO);
-        if (casos.size() > 0) {
-            Log.info("Casos modificados encontrados: " + casos.size());
+        List<AssuntoBean> assuntos = getAssuntos(TipoStatus.MODIFICADO);
+        if (assuntos.size() > 0) {
+            Log.info("assuntos modificados encontrados: " + assuntos.size());
 
-            for (CasoBean casoBean : casos) {
-                atualizaCaso(casoBean);
+            for (AssuntoBean assuntoBean : assuntos) {
+                atualizaassunto(assuntoBean);
             }
         }
 
@@ -258,24 +267,24 @@ public abstract class IntegradorBase extends IntegradorMcFile {
             }
         }
 
-        List<CasoBean> casos = getCasos(TipoStatus.REMOVIDO);
-        if (casos.size() > 0) {
-            Log.info("Casos removidos encontrados: " + casos.size());
+        List<AssuntoBean> assuntos = getAssuntos(TipoStatus.REMOVIDO);
+        if (assuntos.size() > 0) {
+            Log.info("assuntos removidos encontrados: " + assuntos.size());
 
-            for (CasoBean casoBean : casos) {
-                removeCaso(casoBean);
+            for (AssuntoBean assuntoBean : assuntos) {
+                removeassunto(assuntoBean);
             }
         }
 
     }
 
     /**
-     * Retorna lista de casos com o status passado como parametro
+     * Retorna lista de assuntos com o status passado como parametro
      *
      * @param status
      * @return
      */
-    protected abstract List<CasoBean> getCasos(TipoStatus status) throws Exception;
+    protected abstract List<AssuntoBean> getAssuntos(TipoStatus status) throws Exception;
 
     /**
      * Retorna lista de clientes com o status passado como parametro
@@ -286,28 +295,29 @@ public abstract class IntegradorBase extends IntegradorMcFile {
     protected abstract List<ClienteBean> getClientes(TipoStatus status) throws Exception;
 
     /**
-     * Insere um caso no McFile
+     * Insere um assunto no McFile
      *
-     * @param caso
+     * @param assunto
      * @return
      * @throws Exception
      */
-    protected void insereCasoMcFile(CasoBean caso) throws Exception {
+    protected void insereassuntoMcFile(AssuntoBean assunto) throws Exception {
 
         try {
-            List<ValorCampoBean> listaCamposCaso = montaListaCamposCaso(caso);
+            List<ValorCampoBean> listaCamposassunto = montaListaCamposassunto(assunto);
 
-            int codDocCliente = pesquisaCliente(caso.getCodCliente());
+            int codDocCliente = pesquisaCliente(assunto.getCodCliente());
             ValorCampoBean campoILCliente = new ValorCampoBean("CLIENTE", codDocCliente);
-            listaCamposCaso.add(campoILCliente);
+            listaCamposassunto.add(campoILCliente);
 
-            ValorCampoBean campoTipoDoc = new ValorCampoBean("codTipoDoc", CasoBean.COD_TIPO_DOC);
-            listaCamposCaso.add(campoTipoDoc);
+            ValorCampoBean campoTipoDoc = new ValorCampoBean("codTipoDoc", AssuntoBean.COD_TIPO_DOC);
+            listaCamposassunto.add(campoTipoDoc);
 
-            ValorCampoBean campoCodArea = new ValorCampoBean("codArea", Integer.parseInt(configuracao.getArea()));
-            listaCamposCaso.add(campoCodArea);
+            // ValorCampoBean campoCodArea = new ValorCampoBean("codArea",
+            // Integer.parseInt(configuracao.getArea()));
+            // listaCamposassunto.add(campoCodArea);
 
-            chamaInsereDocumentoMcFile(listaCamposCaso);
+            chamaInsereDocumentoMcFile(listaCamposassunto);
         } catch (Exception e) {
             Funcoes.trataErro(e, this);
             throw e;
@@ -330,8 +340,9 @@ public abstract class IntegradorBase extends IntegradorMcFile {
             ValorCampoBean campoTipoDoc = new ValorCampoBean("codTipoDoc", ClienteBean.COD_TIPO_DOC);
             listaCamposCliente.add(campoTipoDoc);
 
-            ValorCampoBean campoCodArea = new ValorCampoBean("codArea", Integer.parseInt(configuracao.getArea()));
-            listaCamposCliente.add(campoCodArea);
+            // ValorCampoBean campoCodArea = new ValorCampoBean("codArea",
+            // Integer.parseInt(configuracao.getArea()));
+            // listaCamposCliente.add(campoCodArea);
 
             chamaInsereDocumentoMcFile(listaCamposCliente);
         } catch (Exception e) {
@@ -368,27 +379,28 @@ public abstract class IntegradorBase extends IntegradorMcFile {
     }
 
     /**
-     * Pesquisa um caso no McFile utilizado seu codigo
+     * Pesquisa um assunto no McFile utilizado seu codigo
      *
-     * @param codCaso
+     * @param codassunto
      * @return
      * @throws IOException
      * @throws IntegradorException
      */
-    private int pesquisaCaso(int codCaso, int codDocCliente) throws IOException, IntegradorException {
+    private int pesquisaassunto(int codassunto, int codDocCliente) throws IOException, IntegradorException {
 
         List<ParametroAvancado> parametros = new ArrayList<ParametroAvancado>();
 
-        ParametroAvancado parametroCodCaso = new ParametroAvancado("NUMERO", String.valueOf(codCaso));
-        parametros.add(parametroCodCaso);
+        ParametroAvancado parametroCodassunto = new ParametroAvancado("NUMERO", String.valueOf(codassunto));
+        parametros.add(parametroCodassunto);
 
-        DocumentoBean[] docsEncontrados = chamaPesquisaMcFile(parametros, Constantes.NIVEL_CASO_JURIDICO,
+        DocumentoBean[] docsEncontrados = chamaPesquisaMcFile(parametros, Constantes.NIVEL_ASSUNTO_JURIDICO,
                 Constantes.ARVORE_JURIDICA, codDocCliente);
 
         if (docsEncontrados.length < 1) {
-            throw new IntegradorException("Não encontrado caso com código " + codCaso + " do cliente " + codDocCliente);
+            throw new IntegradorException("Não encontrado assunto com código " + codassunto + " do cliente "
+                    + codDocCliente);
         } else if (docsEncontrados.length > 1) {
-            Log.info("Encontrado mais de um cliente com o código " + codCaso + " do cliente " + codDocCliente
+            Log.info("Encontrado mais de um cliente com o código " + codassunto + " do cliente " + codDocCliente
                     + ". Será usado o primeiro retornado.");
         }
 
@@ -396,20 +408,20 @@ public abstract class IntegradorBase extends IntegradorMcFile {
     }
 
     /**
-     * Atualiza um caso no McFile
+     * Atualiza um assunto no McFile
      *
-     * @param casoBean
+     * @param assuntoBean
      * @throws Exception
      */
-    protected void atualizaCasoMcFile(CasoBean casoBean) throws Exception {
+    protected void atualizaassuntoMcFile(AssuntoBean assuntoBean) throws Exception {
 
         try {
-            int codDocCliente = pesquisaCliente(casoBean.getCodCliente());
-            int codDocCaso = pesquisaCaso(casoBean.getCodCaso(), codDocCliente);
+            int codDocCliente = pesquisaCliente(assuntoBean.getCodCliente());
+            int codDocassunto = pesquisaassunto(assuntoBean.getCodassunto(), codDocCliente);
 
-            List<ValorCampoBean> campos = montaListaCamposCaso(casoBean);
+            List<ValorCampoBean> campos = montaListaCamposassunto(assuntoBean);
 
-            chamaAtualizaDocumentoMcFile(codDocCaso, CasoBean.COD_TIPO_DOC, campos);
+            chamaAtualizaDocumentoMcFile(codDocassunto, AssuntoBean.COD_TIPO_DOC, campos);
         } catch (Exception e) {
             Funcoes.trataErro(e, this);
             throw e;
@@ -438,22 +450,22 @@ public abstract class IntegradorBase extends IntegradorMcFile {
     }
 
     /**
-     * Remove um caso no McFile
+     * Remove um assunto no McFile
      *
-     * @param casoBean
+     * @param assuntoBean
      * @throws Exception
      */
-    protected void removeCasoMcFile(CasoBean casoBean) throws Exception {
+    protected void removeassuntoMcFile(AssuntoBean assuntoBean) throws Exception {
 
         try {
-            int codDocCliente = pesquisaCliente(casoBean.getCodCliente());
-            int codDocCaso = pesquisaCaso(casoBean.getCodCaso(), codDocCliente);
+            int codDocCliente = pesquisaCliente(assuntoBean.getCodCliente());
+            int codDocassunto = pesquisaassunto(assuntoBean.getCodassunto(), codDocCliente);
 
             List<ValorCampoBean> campos = new ArrayList<ValorCampoBean>();
             ValorCampoBean valorCampo = new ValorCampoBean("ativo", false);
             campos.add(valorCampo);
 
-            chamaAtualizaDocumentoMcFile(codDocCaso, CasoBean.COD_TIPO_DOC, campos);
+            chamaAtualizaDocumentoMcFile(codDocassunto, AssuntoBean.COD_TIPO_DOC, campos);
         } catch (Exception e) {
             Funcoes.trataErro(e, this);
             throw e;
@@ -500,44 +512,44 @@ public abstract class IntegradorBase extends IntegradorMcFile {
         return listaCamposCliente;
     }
 
-    private List<ValorCampoBean> montaListaCamposCaso(CasoBean caso) {
+    private List<ValorCampoBean> montaListaCamposassunto(AssuntoBean assunto) {
 
-        List<ValorCampoBean> listaCamposCaso = new ArrayList<ValorCampoBean>();
+        List<ValorCampoBean> listaCamposassunto = new ArrayList<ValorCampoBean>();
 
-        ValorCampoBean campoTipoCaso = new ValorCampoBean("TIPO", caso.getTipoCaso());
-        listaCamposCaso.add(campoTipoCaso);
+        ValorCampoBean campoTipoassunto = new ValorCampoBean("TIPO", assunto.getTipoAssunto());
+        listaCamposassunto.add(campoTipoassunto);
 
-        ValorCampoBean campoNumeroContrato = new ValorCampoBean("NUMERO", caso.getCodCaso());
-        listaCamposCaso.add(campoNumeroContrato);
+        ValorCampoBean campoNumeroContrato = new ValorCampoBean("NUMERO", assunto.getCodassunto());
+        listaCamposassunto.add(campoNumeroContrato);
 
-        ValorCampoBean campoTituloContrato = new ValorCampoBean("TITULO", caso.getNomeCaso());
-        listaCamposCaso.add(campoTituloContrato);
+        ValorCampoBean campoTituloContrato = new ValorCampoBean("TITULO", assunto.getNomeAssunto());
+        listaCamposassunto.add(campoTituloContrato);
 
         ValorCampoBean campoIdProcesso = new ValorCampoBean("ID_PROCESSO", "");
-        listaCamposCaso.add(campoIdProcesso);
+        listaCamposassunto.add(campoIdProcesso);
 
-        ValorCampoBean campoTipoAcao = new ValorCampoBean("ACAO", caso.getTipoAcao());
-        listaCamposCaso.add(campoTipoAcao);
+        ValorCampoBean campoTipoAcao = new ValorCampoBean("ACAO", assunto.getTipoAcao());
+        listaCamposassunto.add(campoTipoAcao);
 
-        ValorCampoBean campoForo = new ValorCampoBean("FORO", caso.getForo());
-        listaCamposCaso.add(campoForo);
+        ValorCampoBean campoForo = new ValorCampoBean("FORO", assunto.getForo());
+        listaCamposassunto.add(campoForo);
 
-        ValorCampoBean campoVara = new ValorCampoBean("VARA", caso.getVara());
-        listaCamposCaso.add(campoVara);
+        ValorCampoBean campoVara = new ValorCampoBean("VARA", assunto.getVara());
+        listaCamposassunto.add(campoVara);
 
-        ValorCampoBean campoNumProcesso = new ValorCampoBean("NUM_PROCESSO", caso.getNumProcesso());
-        listaCamposCaso.add(campoNumProcesso);
+        ValorCampoBean campoNumProcesso = new ValorCampoBean("NUM_PROCESSO", assunto.getNumProcesso());
+        listaCamposassunto.add(campoNumProcesso);
 
-        ValorCampoBean campoParte = new ValorCampoBean("PARTE", caso.getParte());
-        listaCamposCaso.add(campoParte);
+        ValorCampoBean campoParte = new ValorCampoBean("PARTE", assunto.getParte());
+        listaCamposassunto.add(campoParte);
 
-        ValorCampoBean campoNomeContrato = new ValorCampoBean("NOME_CONTRATO", caso.getNomeContrato());
-        listaCamposCaso.add(campoNomeContrato);
+        ValorCampoBean campoNomeContrato = new ValorCampoBean("NOME_CONTRATO", assunto.getNomeContrato());
+        listaCamposassunto.add(campoNomeContrato);
 
-        ValorCampoBean campoParteContraria = new ValorCampoBean("PARTE_PRINCIPAL", caso.getPartePrincipal());
-        listaCamposCaso.add(campoParteContraria);
+        ValorCampoBean campoParteContraria = new ValorCampoBean("PARTE_PRINCIPAL", assunto.getPartePrincipal());
+        listaCamposassunto.add(campoParteContraria);
 
-        return listaCamposCaso;
+        return listaCamposassunto;
     }
 
 }

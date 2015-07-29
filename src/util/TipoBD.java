@@ -38,7 +38,6 @@ public class TipoBD {
 
     public static int validacao(String nome) {
 
-        System.out.println("Nome " + nome);
         if (nome.equalsIgnoreCase("ORACLEODA")) {
             return ORACLE_ODA;
         } else if (nome.equalsIgnoreCase("MSSQL")) {

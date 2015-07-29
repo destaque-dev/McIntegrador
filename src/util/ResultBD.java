@@ -70,7 +70,7 @@ public class ResultBD {
         try {
             return this.result.getString(field);
         } catch (SQLException e) {
-            throw new BDException("Erro ao ler o campo (" + field + "): " + e.getMessage());
+            return null;
         }
     }
 
@@ -261,7 +261,7 @@ public class ResultBD {
     /**
      * Os campos que precisam ser lidos com esta função devem ser lidos primeiro devido a uma
      * restrição imposta pelo Oracle7 ao tentar ler campos do tipo LONG.
-     * 
+     *
      * @param field
      *            Nome do campo
      * @param tipoBD
