@@ -25,7 +25,7 @@ Necessário configurar dentro do BAT:
 <li>Caminho do prunsrv.exe (PR_INSTALL)<br />
 <li>Caminho dos logs (PR_LOGPATH)<br />
 <li>Caminho do McIntegrador.jar gerado (PR_CLASSPATH)<br />
-<li>Caminho do jvm.dll do java no servidor. (PR_JVM) (Necessário Java 5 ou superior)<br />
+<li>Caminho do jvm.dll do java no servidor. (PR_JVM) <b>(Necessário Java 5 ou superior)</b><br />
 </ul>
 
 <b>Obs</b>: O prunsrv.exe da pasta raiz do rar executa somente para java de 32 bits. Para versões 64 bits necessário escolher versão AMD ou IA (Intel).<br />
