@@ -9,6 +9,12 @@ import bean.padrao.AssuntoBean;
 import bean.padrao.ClienteBean;
 import exception.BDException;
 
+/**
+ * Integrador pré-configurado para acessar tabelas intermediárias. Para mais informações, consulte
+ * http://mcfile-developers.helpscoutdocs.com/article/81-o-mcintegrador
+ * 
+ * @author Vinicius
+ */
 public class IntegradorExemplo extends IntegradorBase {
 
     public IntegradorExemplo() throws Exception {
