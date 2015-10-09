@@ -16,6 +16,10 @@ public class ClienteBean {
 
     private String tipoPessoa;
 
+    private String situacao;
+
+    private int codArea;
+
     public int getCodCliente() {
 
         return codCliente;
@@ -74,6 +78,26 @@ public class ClienteBean {
     public void setTipoPessoa(String tipoPessoa) {
 
         this.tipoPessoa = tipoPessoa;
+    }
+
+    public int getCodArea() {
+
+        return codArea;
+    }
+
+    public void setCodArea(int codArea) {
+
+        this.codArea = codArea;
+    }
+
+    public String getSituacao() {
+
+        return situacao;
+    }
+
+    public void setSituacao(String situacao) {
+
+        this.situacao = situacao;
     }
 
 }

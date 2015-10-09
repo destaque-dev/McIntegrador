@@ -306,16 +306,17 @@ public abstract class IntegradorBase extends IntegradorMcFile {
         try {
             List<ValorCampoBean> listaCamposassunto = montaListaCamposassunto(assunto);
 
-            int codDocCliente = pesquisaCliente(assunto.getCodCliente());
+            int codDocCliente = pesquisaCliente(assunto.getCodCliente(), assunto.getCodArea());
             ValorCampoBean campoILCliente = new ValorCampoBean("CLIENTE", codDocCliente);
             listaCamposassunto.add(campoILCliente);
 
             ValorCampoBean campoTipoDoc = new ValorCampoBean("codTipoDoc", AssuntoBean.COD_TIPO_DOC);
             listaCamposassunto.add(campoTipoDoc);
 
-            // ValorCampoBean campoCodArea = new ValorCampoBean("codArea",
-            // Integer.parseInt(configuracao.getArea()));
-            // listaCamposassunto.add(campoCodArea);
+            if (assunto.getCodArea() > 0) {
+                ValorCampoBean campoCodArea = new ValorCampoBean("codArea", assunto.getCodArea());
+                listaCamposassunto.add(campoCodArea);
+            }
 
             chamaInsereDocumentoMcFile(listaCamposassunto);
         } catch (Exception e) {
@@ -340,9 +341,10 @@ public abstract class IntegradorBase extends IntegradorMcFile {
             ValorCampoBean campoTipoDoc = new ValorCampoBean("codTipoDoc", ClienteBean.COD_TIPO_DOC);
             listaCamposCliente.add(campoTipoDoc);
 
-            // ValorCampoBean campoCodArea = new ValorCampoBean("codArea",
-            // Integer.parseInt(configuracao.getArea()));
-            // listaCamposCliente.add(campoCodArea);
+            if (cliente.getCodArea() > 0) {
+                ValorCampoBean campoCodArea = new ValorCampoBean("codArea", cliente.getCodArea());
+                listaCamposCliente.add(campoCodArea);
+            }
 
             chamaInsereDocumentoMcFile(listaCamposCliente);
         } catch (Exception e) {
@@ -359,7 +361,7 @@ public abstract class IntegradorBase extends IntegradorMcFile {
      * @throws IOException
      * @throws IntegradorException
      */
-    private int pesquisaCliente(int codCliente) throws IOException, IntegradorException {
+    protected int pesquisaCliente(int codCliente, int codArea) throws IOException, IntegradorException {
 
         List<ParametroAvancado> parametros = new ArrayList<ParametroAvancado>();
 
@@ -376,6 +378,7 @@ public abstract class IntegradorBase extends IntegradorMcFile {
         }
 
         return Integer.parseInt(docsEncontrados[0].getCodigo());
+
     }
 
     /**
@@ -386,7 +389,8 @@ public abstract class IntegradorBase extends IntegradorMcFile {
      * @throws IOException
      * @throws IntegradorException
      */
-    private int pesquisaassunto(int codassunto, int codDocCliente) throws IOException, IntegradorException {
+    protected int pesquisaassunto(int codassunto, int codDocCliente, int codArea) throws IOException,
+            IntegradorException {
 
         List<ParametroAvancado> parametros = new ArrayList<ParametroAvancado>();
 
@@ -416,8 +420,8 @@ public abstract class IntegradorBase extends IntegradorMcFile {
     protected void atualizaassuntoMcFile(AssuntoBean assuntoBean) throws Exception {
 
         try {
-            int codDocCliente = pesquisaCliente(assuntoBean.getCodCliente());
-            int codDocassunto = pesquisaassunto(assuntoBean.getCodassunto(), codDocCliente);
+            int codDocCliente = pesquisaCliente(assuntoBean.getCodCliente(), assuntoBean.getCodArea());
+            int codDocassunto = pesquisaassunto(assuntoBean.getCodassunto(), codDocCliente, assuntoBean.getCodArea());
 
             List<ValorCampoBean> campos = montaListaCamposassunto(assuntoBean);
 
@@ -438,7 +442,7 @@ public abstract class IntegradorBase extends IntegradorMcFile {
     protected void atualizaClienteMcFile(ClienteBean clienteJuridicoBean) throws Exception {
 
         try {
-            int codDocCliente = pesquisaCliente(clienteJuridicoBean.getCodCliente());
+            int codDocCliente = pesquisaCliente(clienteJuridicoBean.getCodCliente(), clienteJuridicoBean.getCodArea());
 
             List<ValorCampoBean> campos = montaListaCamposClienteJuridico(clienteJuridicoBean);
 
@@ -458,8 +462,8 @@ public abstract class IntegradorBase extends IntegradorMcFile {
     protected void removeassuntoMcFile(AssuntoBean assuntoBean) throws Exception {
 
         try {
-            int codDocCliente = pesquisaCliente(assuntoBean.getCodCliente());
-            int codDocassunto = pesquisaassunto(assuntoBean.getCodassunto(), codDocCliente);
+            int codDocCliente = pesquisaCliente(assuntoBean.getCodCliente(), assuntoBean.getCodCliente());
+            int codDocassunto = pesquisaassunto(assuntoBean.getCodassunto(), codDocCliente, assuntoBean.getCodCliente());
 
             List<ValorCampoBean> campos = new ArrayList<ValorCampoBean>();
             ValorCampoBean valorCampo = new ValorCampoBean("ativo", false);
@@ -482,7 +486,8 @@ public abstract class IntegradorBase extends IntegradorMcFile {
     protected void removeClienteMcFile(ClienteBean clienteJuridicoBean) throws Exception {
 
         try {
-            int codDocCliente = pesquisaCliente(clienteJuridicoBean.getCodCliente());
+            int codDocCliente = pesquisaCliente(clienteJuridicoBean.getCodCliente(),
+                    clienteJuridicoBean.getCodCliente());
 
             List<ValorCampoBean> campos = new ArrayList<ValorCampoBean>();
 
@@ -508,6 +513,18 @@ public abstract class IntegradorBase extends IntegradorMcFile {
 
         ValorCampoBean campoNomeFantasia = new ValorCampoBean("NOME_FANTASIA", cliente.getNomeFantasia());
         listaCamposCliente.add(campoNomeFantasia);
+
+        ValorCampoBean campoCnpj = new ValorCampoBean("CNPJ", cliente.getCnpj());
+        listaCamposCliente.add(campoCnpj);
+
+        ValorCampoBean campoTipoCliente = new ValorCampoBean("TIPO_CLIENTE", cliente.getTipoCliente());
+        listaCamposCliente.add(campoTipoCliente);
+
+        ValorCampoBean campoTipoPessoa = new ValorCampoBean("TIPO_PESSOA", cliente.getTipoPessoa());
+        listaCamposCliente.add(campoTipoPessoa);
+
+        ValorCampoBean campoSituacao = new ValorCampoBean("SITUACAO", cliente.getSituacao());
+        listaCamposCliente.add(campoSituacao);
 
         return listaCamposCliente;
     }
@@ -548,6 +565,9 @@ public abstract class IntegradorBase extends IntegradorMcFile {
 
         ValorCampoBean campoParteContraria = new ValorCampoBean("PARTE_PRINCIPAL", assunto.getPartePrincipal());
         listaCamposassunto.add(campoParteContraria);
+
+        ValorCampoBean campoRamo = new ValorCampoBean("RAMO", assunto.getRamo());
+        listaCamposassunto.add(campoRamo);
 
         return listaCamposassunto;
     }

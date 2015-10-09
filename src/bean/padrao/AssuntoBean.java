@@ -26,6 +26,10 @@ public class AssuntoBean {
 
     private String partePrincipal;
 
+    private String ramo;
+
+    private int codArea;
+
     public int getCodassunto() {
 
         return codAssunto;
@@ -134,6 +138,26 @@ public class AssuntoBean {
     public void setPartePrincipal(String partePrincipal) {
 
         this.partePrincipal = partePrincipal;
+    }
+
+    public int getCodArea() {
+
+        return codArea;
+    }
+
+    public void setCodArea(int codArea) {
+
+        this.codArea = codArea;
+    }
+
+    public String getRamo() {
+
+        return ramo;
+    }
+
+    public void setRamo(String ramo) {
+
+        this.ramo = ramo;
     }
 
 }
