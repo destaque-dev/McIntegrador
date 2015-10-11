@@ -1,7 +1,6 @@
 package util;
 
 import integracao.IntegradorBase;
-import integracao.IntegradorMcFile;
 
 import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
@@ -82,7 +81,7 @@ public class Funcoes {
         return result.toString();
     }
 
-    public static void trataErro(Throwable e, IntegradorMcFile integrador) {
+    public static void trataErro(Throwable e, IntegradorBase integrador) {
 
         if (e instanceof HttpStatusException) {
             if (((HttpStatusException) e).getStatusCode() == HttpURLConnection.HTTP_PRECON_FAILED) {
@@ -102,7 +101,7 @@ public class Funcoes {
         } else if (e instanceof BDException && integrador instanceof IntegradorBase) {
             try {
                 Log.error("Erro de banco de dados", e);
-                ((IntegradorBase) integrador).conectaBancoDados();
+                integrador.conectaBancoDados();
             } catch (Exception e1) {
                 Log.error("Falha ao reconectar ao banco de dados", e);
             }

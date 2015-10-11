@@ -1,7 +1,7 @@
 package main;
 
+import integracao.IntegradorBase;
 import integracao.IntegradorExemplo;
-import integracao.IntegradorMcFile;
 import util.Funcoes;
 import util.Log;
 import bean.Configuracao;
@@ -18,9 +18,7 @@ public class IniciaMcIntegrador {
 
             Configuracao configuracao = Configuracao.getInstance();
 
-            IntegradorMcFile integrador = montaIntegrador(configuracao);
-
-            integrador.loginMcFile();
+            IntegradorBase integrador = montaIntegrador(configuracao);
 
             while (!isStop()) {
 
@@ -48,9 +46,9 @@ public class IniciaMcIntegrador {
 
     }
 
-    private static IntegradorMcFile montaIntegrador(Configuracao configuracao) throws Exception {
+    private static IntegradorBase montaIntegrador(Configuracao configuracao) throws Exception {
 
-        IntegradorMcFile integrador = null;
+        IntegradorBase integrador = null;
 
         integrador = montaIntegrador();
 
@@ -82,7 +80,7 @@ public class IniciaMcIntegrador {
         return stop;
     }
 
-    public static IntegradorMcFile montaIntegrador() throws Exception {
+    public static IntegradorBase montaIntegrador() throws Exception {
 
         return new IntegradorExemplo();
     }

@@ -1,14 +1,16 @@
 package bean.padrao;
 
+import java.io.File;
+
 public class AssuntoBean {
 
     public static int COD_TIPO_DOC = 236;
 
-    private int codAssunto;
+    private String codAssunto;
 
     private String nomeAssunto;
 
-    private int codCliente;
+    private String codCliente;
 
     private String parte;
 
@@ -30,34 +32,18 @@ public class AssuntoBean {
 
     private int codArea;
 
-    public int getCodassunto() {
+    private File arquivo;
 
-        return codAssunto;
-    }
-
-    public void setCodAssunto(int codassunto) {
-
-        this.codAssunto = codassunto;
-    }
+    private String nomeCliente;
 
     public String getNomeAssunto() {
 
         return nomeAssunto;
     }
 
-    public void setNomeassunto(String nomeassunto) {
+    public void setNomeAssunto(String nomeassunto) {
 
         this.nomeAssunto = nomeassunto;
-    }
-
-    public int getCodCliente() {
-
-        return codCliente;
-    }
-
-    public void setCodCliente(int codCliente) {
-
-        this.codCliente = codCliente;
     }
 
     public String getParte() {
@@ -158,6 +144,46 @@ public class AssuntoBean {
     public void setRamo(String ramo) {
 
         this.ramo = ramo;
+    }
+
+    public File getArquivo() {
+
+        return arquivo;
+    }
+
+    public void setArquivo(File arquivo) {
+
+        this.arquivo = arquivo;
+    }
+
+    public String getNomeCliente() {
+
+        return nomeCliente;
+    }
+
+    public void setNomeCliente(String nomeCliente) {
+
+        this.nomeCliente = nomeCliente;
+    }
+
+    public String getCodAssunto() {
+
+        return codAssunto;
+    }
+
+    public void setCodAssunto(String codAssunto) {
+
+        this.codAssunto = codAssunto;
+    }
+
+    public String getCodCliente() {
+
+        return codCliente;
+    }
+
+    public void setCodCliente(String codCliente) {
+
+        this.codCliente = codCliente;
     }
 
 }

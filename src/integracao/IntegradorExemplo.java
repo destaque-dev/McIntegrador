@@ -23,22 +23,22 @@ public class IntegradorExemplo extends IntegradorBase {
     }
 
     @Override
-    protected void assuntoIntegrado(int codigo) throws BDException {
+    protected void assuntoIntegrado(AssuntoBean assunto) throws BDException {
 
         String update = "UPDATE TABELA_ASSUNTO_INTEGRACAO SET STATUS = '" + TipoStatus.IMPORTADO.getStatus()
                 + "' WHERE CODIGO_ASSUNTO = ?";
 
-        conexao.executeUpdate(update, codigo);
+        conexao.executeUpdate(update, assunto.getCodAssunto());
 
     }
 
     @Override
-    protected void clienteIntegrado(int codigo) throws BDException {
+    protected void clienteIntegrado(ClienteBean cliente) throws BDException {
 
         String update = "UPDATE TABELA_CLIENTE_INTEGRACAO SET STATUS = '" + TipoStatus.IMPORTADO.getStatus()
                 + "' WHERE CODIGO_CLIENTE = ?";
 
-        conexao.executeUpdate(update, codigo);
+        conexao.executeUpdate(update, cliente.getCodCliente());
 
     }
 
@@ -54,8 +54,8 @@ public class IntegradorExemplo extends IntegradorBase {
 
             while (res.next()) {
 
-                int codCliente = res.getInt("CODIGO_CLIENTE");
-                int codAssunto = res.getInt("CODIGO_ASSUNTO");
+                String codCliente = res.getString("CODIGO_CLIENTE");
+                String codAssunto = res.getString("CODIGO_ASSUNTO");
                 String tipoAssunto = res.getString("TIPO_ASSUNTO");
                 String tituloAssunto = res.getString("TITULO_ASSUNTO");
 
@@ -77,7 +77,7 @@ public class IntegradorExemplo extends IntegradorBase {
                 AssuntoBean assuntoBean = new AssuntoBean();
                 assuntoBean.setCodAssunto(codAssunto);
                 assuntoBean.setCodCliente(codCliente);
-                assuntoBean.setNomeassunto(tituloAssunto);
+                assuntoBean.setNomeAssunto(tituloAssunto);
                 assuntoBean.setTipoAcao(tipoAcao);
                 assuntoBean.setNumProcesso(numProcesso);
                 assuntoBean.setParte(parte);
@@ -107,7 +107,7 @@ public class IntegradorExemplo extends IntegradorBase {
 
             while (res.next()) {
 
-                int codCliente = res.getInt("CODIGO_CLIENTE");
+                String codCliente = res.getString("CODIGO_CLIENTE");
                 String razaoSocial = res.getString("RAZAO_SOCIAL");
                 String nomeFantasia = res.getString("NOME_FANTASIA");
                 String cnpj = res.getString("CNPJ");
@@ -134,6 +134,12 @@ public class IntegradorExemplo extends IntegradorBase {
 
     @Override
     protected boolean isBD() {
+
+        return true;
+    }
+
+    @Override
+    protected boolean isLogin() {
 
         return true;
     }

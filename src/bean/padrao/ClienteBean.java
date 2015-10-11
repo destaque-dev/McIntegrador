@@ -4,7 +4,7 @@ public class ClienteBean {
 
     public static int COD_TIPO_DOC = 1553944;
 
-    private int codCliente;
+    private String codCliente;
 
     private String nomeCliente;
 
@@ -20,12 +20,12 @@ public class ClienteBean {
 
     private int codArea;
 
-    public int getCodCliente() {
+    public String getCodCliente() {
 
         return codCliente;
     }
 
-    public void setCodCliente(int codCliente) {
+    public void setCodCliente(String codCliente) {
 
         this.codCliente = codCliente;
     }

@@ -4,20 +4,35 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jsoup.Connection;
+import org.jsoup.Connection.Method;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import util.ConexaoIntegrador;
 import util.Funcoes;
 import util.Log;
+import bean.BeanUsuarioLogado;
+import bean.Configuracao;
 import bean.Constantes;
 import bean.DocumentoBean;
+import bean.DocumentoInseridoBean;
 import bean.ParametroAvancado;
 import bean.TipoStatus;
 import bean.ValorCampoBean;
 import bean.padrao.AssuntoBean;
 import bean.padrao.ClienteBean;
+
+import com.google.gson.Gson;
+
 import exception.BDException;
 import exception.IntegradorException;
 
-public abstract class IntegradorBase extends IntegradorMcFile {
+public abstract class IntegradorBase {
+
+    protected Configuracao configuracao;
+
+    private int idSessao;
 
     protected ConexaoIntegrador conexao;
 
@@ -27,6 +42,137 @@ public abstract class IntegradorBase extends IntegradorMcFile {
             conectaBancoDados();
             Log.info("Conectou banco de dados");
         }
+
+        if (isLogin()) {
+            loginMcFile();
+        }
+    }
+
+    /**
+     * Loga no McFile
+     *
+     * @throws Exception
+     */
+    public void loginMcFile() throws Exception {
+
+        String urlEnviaEmail = Constantes.URL_MCFILE + Constantes.CTRL_SERVICOS;
+
+        Connection con = Jsoup.connect(urlEnviaEmail);
+
+        con.data(Constantes.PARAM_CMD, Constantes.ATV_LOGIN_CLIENT_COM_SESSAO);
+        con.data(Constantes.PARAM_LOGIN, configuracao.getLoginMcFile());
+        con.data(Constantes.PARAM_SENHA, configuracao.getSenhaMcFile());
+
+        con.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+
+        con.method(Method.POST).ignoreContentType(true);
+
+        con.timeout(0);
+        Document doc = con.post();
+
+        BeanUsuarioLogado beanUsuarioLogado = new Gson().fromJson(doc.body().text(), BeanUsuarioLogado.class);
+
+        idSessao = beanUsuarioLogado.getIdSessao();
+
+        Log.info("Logou McFile");
+    }
+
+    /**
+     * Invoca McFile API para pesquisar no McFile
+     *
+     * @param parametros
+     *            parametros de pesquisa
+     * @param level
+     *            nivel da arvore
+     * @param treeID
+     *            codigo da arvore
+     * @return
+     * @throws IOException
+     */
+    protected DocumentoBean[] chamaPesquisaMcFile(List<ParametroAvancado> parametros, int level, int treeID,
+            Integer codPai) throws IOException {
+
+        String url = Constantes.URL_MCFILE + Constantes.CTRL_SERVICOS;
+
+        Connection con = Jsoup.connect(url);
+
+        con.data(Constantes.PARAM_CMD, Constantes.ATV_PESQUISA_CLIENTE);
+        con.data(Constantes.PARAM_AVANCADOS, new Gson().toJson(parametros));
+        con.data(Constantes.PARAM_ID_SESSAO, String.valueOf(idSessao));
+        con.data(Constantes.PARAM_NIVEL_ARVORE, String.valueOf(level));
+        con.data(Constantes.PARAM_ARVORE, String.valueOf(treeID));
+
+        if (codPai != null && codPai > 0) {
+            con.data(Constantes.PARAM_CODIGO_PAI, String.valueOf(codPai));
+
+        }
+
+        con.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+
+        con.timeout(0);
+
+        Document doc = con.post();
+
+        DocumentoBean[] docsEncontrados = new Gson().fromJson(doc.body().text(), DocumentoBean[].class);
+
+        return docsEncontrados;
+    }
+
+    /**
+     * Invoca McFile API para inserir um documento no McFile
+     *
+     * @param listaCampos
+     * @return
+     * @throws Exception
+     */
+    protected int chamaInsereDocumentoMcFile(List<ValorCampoBean> listaCampos) throws Exception {
+
+        String url = Constantes.URL_MCFILE + Constantes.CTRL_SERVICOS;
+
+        Connection con = Jsoup.connect(url);
+
+        con.data(Constantes.PARAM_CMD, Constantes.ATV_INSERE_DOCUMENTO);
+        con.data(Constantes.PARAM_VALORES_CAMPOS, new Gson().toJson(listaCampos));
+        con.data(Constantes.PARAM_ID_SESSAO, String.valueOf(idSessao));
+
+        con.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+
+        con.timeout(0);
+
+        Document doc = con.post();
+
+        DocumentoInseridoBean docInserido = new Gson().fromJson(doc.body().text(), DocumentoInseridoBean.class);
+        return docInserido.getCodDoc();
+
+    }
+
+    /**
+     * Invoca McFile API para atulizar um documento no McFile
+     *
+     * @param codDoc
+     * @param listaCampos
+     * @return
+     * @throws Exception
+     */
+    protected void chamaAtualizaDocumentoMcFile(int codDoc, int codTipoDoc, List<ValorCampoBean> listaCampos)
+            throws Exception {
+
+        String url = Constantes.URL_MCFILE + Constantes.CTRL_SERVICOS;
+
+        Connection con = Jsoup.connect(url);
+
+        con.data(Constantes.PARAM_CMD, Constantes.ATUALIZA_DOCUMENTO);
+        con.data(Constantes.PARAM_VALORES_CAMPOS, new Gson().toJson(listaCampos));
+        con.data(Constantes.PARAM_ID_SESSAO, String.valueOf(idSessao));
+        con.data(Constantes.PARAM_COD_DOC, String.valueOf(codDoc));
+        con.data(Constantes.PARAM_COD_TIPO_DOC, String.valueOf(codTipoDoc));
+
+        con.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+
+        con.timeout(0);
+
+        con.post();
+
     }
 
     /**
@@ -52,16 +198,26 @@ public abstract class IntegradorBase extends IntegradorMcFile {
      */
     protected void adicionaAssunto(AssuntoBean assuntoBean) throws Exception {
 
-        iniciaTransacao();
         try {
-            assuntoIntegrado(assuntoBean.getCodassunto());
-            insereassuntoMcFile(assuntoBean);
-            commit();
-            Log.info("assunto " + assuntoBean.getCodassunto() + " do cliente " + assuntoBean.getCodCliente()
+            if (isBD()) {
+                iniciaTransacao();
+
+                assuntoIntegrado(assuntoBean);
+                insereassuntoMcFile(assuntoBean);
+
+                commit();
+            } else {
+                insereassuntoMcFile(assuntoBean);
+                assuntoIntegrado(assuntoBean);
+            }
+
+            Log.info("assunto " + assuntoBean.getCodAssunto() + " do cliente " + assuntoBean.getCodCliente()
                     + "  inserido");
         } catch (Exception e) {
-            rollback();
-            throw e;
+            if (isBD()) {
+                rollback();
+            }
+            Funcoes.trataErro(e, this);
         }
     }
 
@@ -73,30 +229,55 @@ public abstract class IntegradorBase extends IntegradorMcFile {
      */
     protected void adicionaCliente(ClienteBean clienteJuridicoBean) throws Exception {
 
-        iniciaTransacao();
         try {
-            clienteIntegrado(clienteJuridicoBean.getCodCliente());
-            insereClienteMcFile(clienteJuridicoBean);
-            commit();
+            if (isBD()) {
+                iniciaTransacao();
+
+                clienteIntegrado(clienteJuridicoBean);
+                insereClienteMcFile(clienteJuridicoBean);
+
+                commit();
+            } else {
+                insereClienteMcFile(clienteJuridicoBean);
+                clienteIntegrado(clienteJuridicoBean);
+            }
+
             Log.info("Cliente " + clienteJuridicoBean.getCodCliente() + " inserido");
         } catch (Exception e) {
-            rollback();
-            throw e;
+            if (isBD()) {
+                rollback();
+            }
+            Funcoes.trataErro(e, this);
         }
     }
 
+    /**
+     * Atualiza assunto encontrado
+     *
+     * @param assuntoBean
+     * @throws Exception
+     */
     protected void atualizaassunto(AssuntoBean assuntoBean) throws Exception {
 
-        iniciaTransacao();
         try {
-            assuntoIntegrado(assuntoBean.getCodassunto());
-            atualizaassuntoMcFile(assuntoBean);
-            commit();
-            Log.info("assunto " + assuntoBean.getCodassunto() + " do cliente " + assuntoBean.getCodCliente()
+            if (isBD()) {
+                iniciaTransacao();
+
+                assuntoIntegrado(assuntoBean);
+                atualizaassuntoMcFile(assuntoBean);
+
+                commit();
+            } else {
+                atualizaassuntoMcFile(assuntoBean);
+                assuntoIntegrado(assuntoBean);
+            }
+            Log.info("assunto " + assuntoBean.getCodAssunto() + " do cliente " + assuntoBean.getCodCliente()
                     + "  atualizado");
         } catch (Exception e) {
-            rollback();
-            throw e;
+            if (isBD()) {
+                rollback();
+            }
+            Funcoes.trataErro(e, this);
         }
     }
 
@@ -108,15 +289,24 @@ public abstract class IntegradorBase extends IntegradorMcFile {
      */
     protected void atualizaCliente(ClienteBean clienteJuridicoBean) throws Exception {
 
-        iniciaTransacao();
         try {
-            clienteIntegrado(clienteJuridicoBean.getCodCliente());
-            atualizaClienteMcFile(clienteJuridicoBean);
-            commit();
+            if (isBD()) {
+                iniciaTransacao();
+
+                clienteIntegrado(clienteJuridicoBean);
+                atualizaClienteMcFile(clienteJuridicoBean);
+
+                commit();
+            } else {
+                atualizaClienteMcFile(clienteJuridicoBean);
+                clienteIntegrado(clienteJuridicoBean);
+            }
             Log.info("Cliente " + clienteJuridicoBean.getCodCliente() + " atualizado");
         } catch (Exception e) {
-            rollback();
-            throw e;
+            if (isBD()) {
+                rollback();
+            }
+            Funcoes.trataErro(e, this);
         }
     }
 
@@ -128,16 +318,25 @@ public abstract class IntegradorBase extends IntegradorMcFile {
      */
     protected void removeassunto(AssuntoBean assuntoBean) throws Exception {
 
-        iniciaTransacao();
         try {
-            assuntoIntegrado(assuntoBean.getCodassunto());
-            removeassuntoMcFile(assuntoBean);
-            commit();
-            Log.info("assunto " + assuntoBean.getCodassunto() + " do cliente " + assuntoBean.getCodCliente()
+            if (isBD()) {
+                iniciaTransacao();
+
+                assuntoIntegrado(assuntoBean);
+                removeassuntoMcFile(assuntoBean);
+
+                commit();
+            } else {
+                removeassuntoMcFile(assuntoBean);
+                assuntoIntegrado(assuntoBean);
+            }
+            Log.info("assunto " + assuntoBean.getCodAssunto() + " do cliente " + assuntoBean.getCodCliente()
                     + "  removido");
         } catch (Exception e) {
-            rollback();
-            throw e;
+            if (isBD()) {
+                rollback();
+            }
+            Funcoes.trataErro(e, this);
         }
 
     }
@@ -150,66 +349,48 @@ public abstract class IntegradorBase extends IntegradorMcFile {
      */
     protected void removeCliente(ClienteBean clienteJuridicoBean) throws Exception {
 
-        iniciaTransacao();
         try {
-            clienteIntegrado(clienteJuridicoBean.getCodCliente());
-            removeClienteMcFile(clienteJuridicoBean);
-            commit();
+            if (isBD()) {
+                iniciaTransacao();
+
+                clienteIntegrado(clienteJuridicoBean);
+                removeClienteMcFile(clienteJuridicoBean);
+
+                commit();
+            } else {
+                removeClienteMcFile(clienteJuridicoBean);
+                clienteIntegrado(clienteJuridicoBean);
+            }
             Log.info("Cliente " + clienteJuridicoBean.getCodCliente() + " removido");
         } catch (Exception e) {
-            rollback();
-            throw e;
+            if (isBD()) {
+                rollback();
+            }
+            Funcoes.trataErro(e, this);
         }
 
     }
 
-    /**
-     * Efetua procedimento para informar que o assunto foi integrado com sucesso
-     *
-     * @param nomeTabela
-     * @param codigo
-     * @throws BDException
-     */
-    protected abstract void assuntoIntegrado(int codigo) throws BDException;
-
-    /**
-     * Efetua procedimento para informar que cliente foi integrado com sucesso
-     *
-     * @param nomeTabela
-     * @param codigo
-     * @throws BDException
-     */
-    protected abstract void clienteIntegrado(int codigo) throws BDException;
-
-    /**
-     * Define se o integrador usa acesso a banco de dados
-     *
-     * @return
-     */
-    protected abstract boolean isBD();
-
     private void rollback() throws BDException {
 
-        if (isBD()) {
-            conexao.rollback();
-        }
+        conexao.rollback();
     }
 
     private void commit() throws BDException {
 
-        if (isBD()) {
-            conexao.commit();
-        }
+        conexao.commit();
     }
 
     private void iniciaTransacao() throws BDException {
 
-        if (isBD()) {
-            conexao.iniciarTransacao();
-        }
+        conexao.iniciarTransacao();
     }
 
-    @Override
+    /**
+     * Verifica novos registros a serem inseridos na base e os insere, caso encontre
+     *
+     * @throws Exception
+     */
     public void verificaRegistrosNovos() throws Exception {
 
         List<ClienteBean> clientes = getClientes(TipoStatus.ADICIONADO);
@@ -232,7 +413,11 @@ public abstract class IntegradorBase extends IntegradorMcFile {
 
     }
 
-    @Override
+    /**
+     * Verifica registros a serem inseridos na base e os atualiza, caso encontre
+     *
+     * @throws Exception
+     */
     public void verificaRegistrosAtualizados() throws Exception {
 
         List<ClienteBean> clientes = getClientes(TipoStatus.MODIFICADO);
@@ -255,7 +440,11 @@ public abstract class IntegradorBase extends IntegradorMcFile {
 
     }
 
-    @Override
+    /**
+     * Verifica registros a serem inseridos na base e os atualiza, caso encontre
+     *
+     * @throws Exception
+     */
     public void verificaRegistrosRemovidos() throws Exception {
 
         List<ClienteBean> clientes = getClientes(TipoStatus.REMOVIDO);
@@ -277,22 +466,6 @@ public abstract class IntegradorBase extends IntegradorMcFile {
         }
 
     }
-
-    /**
-     * Retorna lista de assuntos com o status passado como parametro
-     *
-     * @param status
-     * @return
-     */
-    protected abstract List<AssuntoBean> getAssuntos(TipoStatus status) throws Exception;
-
-    /**
-     * Retorna lista de clientes com o status passado como parametro
-     *
-     * @param status
-     * @return
-     */
-    protected abstract List<ClienteBean> getClientes(TipoStatus status) throws Exception;
 
     /**
      * Insere um assunto no McFile
@@ -320,7 +493,6 @@ public abstract class IntegradorBase extends IntegradorMcFile {
 
             chamaInsereDocumentoMcFile(listaCamposassunto);
         } catch (Exception e) {
-            Funcoes.trataErro(e, this);
             throw e;
         }
 
@@ -348,7 +520,6 @@ public abstract class IntegradorBase extends IntegradorMcFile {
 
             chamaInsereDocumentoMcFile(listaCamposCliente);
         } catch (Exception e) {
-            Funcoes.trataErro(e, this);
             throw e;
         }
     }
@@ -361,11 +532,11 @@ public abstract class IntegradorBase extends IntegradorMcFile {
      * @throws IOException
      * @throws IntegradorException
      */
-    protected int pesquisaCliente(int codCliente, int codArea) throws IOException, IntegradorException {
+    protected int pesquisaCliente(String codCliente, int codArea) throws IOException, IntegradorException {
 
         List<ParametroAvancado> parametros = new ArrayList<ParametroAvancado>();
 
-        ParametroAvancado parametroCodCliente = new ParametroAvancado("NUMERO", String.valueOf(codCliente));
+        ParametroAvancado parametroCodCliente = new ParametroAvancado("NUMERO", codCliente);
         parametros.add(parametroCodCliente);
 
         DocumentoBean[] docsEncontrados = chamaPesquisaMcFile(parametros, Constantes.NIVEL_CLIENTE_JURIDICO,
@@ -389,12 +560,12 @@ public abstract class IntegradorBase extends IntegradorMcFile {
      * @throws IOException
      * @throws IntegradorException
      */
-    protected int pesquisaassunto(int codassunto, int codDocCliente, int codArea) throws IOException,
+    protected int pesquisaAssunto(String codassunto, int codDocCliente, int codArea) throws IOException,
             IntegradorException {
 
         List<ParametroAvancado> parametros = new ArrayList<ParametroAvancado>();
 
-        ParametroAvancado parametroCodassunto = new ParametroAvancado("NUMERO", String.valueOf(codassunto));
+        ParametroAvancado parametroCodassunto = new ParametroAvancado("NUMERO", codassunto);
         parametros.add(parametroCodassunto);
 
         DocumentoBean[] docsEncontrados = chamaPesquisaMcFile(parametros, Constantes.NIVEL_ASSUNTO_JURIDICO,
@@ -421,13 +592,12 @@ public abstract class IntegradorBase extends IntegradorMcFile {
 
         try {
             int codDocCliente = pesquisaCliente(assuntoBean.getCodCliente(), assuntoBean.getCodArea());
-            int codDocassunto = pesquisaassunto(assuntoBean.getCodassunto(), codDocCliente, assuntoBean.getCodArea());
+            int codDocassunto = pesquisaAssunto(assuntoBean.getCodAssunto(), codDocCliente, assuntoBean.getCodArea());
 
             List<ValorCampoBean> campos = montaListaCamposassunto(assuntoBean);
 
             chamaAtualizaDocumentoMcFile(codDocassunto, AssuntoBean.COD_TIPO_DOC, campos);
         } catch (Exception e) {
-            Funcoes.trataErro(e, this);
             throw e;
         }
 
@@ -448,7 +618,6 @@ public abstract class IntegradorBase extends IntegradorMcFile {
 
             chamaAtualizaDocumentoMcFile(codDocCliente, ClienteBean.COD_TIPO_DOC, campos);
         } catch (Exception e) {
-            Funcoes.trataErro(e, this);
             throw e;
         }
     }
@@ -462,8 +631,8 @@ public abstract class IntegradorBase extends IntegradorMcFile {
     protected void removeassuntoMcFile(AssuntoBean assuntoBean) throws Exception {
 
         try {
-            int codDocCliente = pesquisaCliente(assuntoBean.getCodCliente(), assuntoBean.getCodCliente());
-            int codDocassunto = pesquisaassunto(assuntoBean.getCodassunto(), codDocCliente, assuntoBean.getCodCliente());
+            int codDocCliente = pesquisaCliente(assuntoBean.getCodCliente(), assuntoBean.getCodArea());
+            int codDocassunto = pesquisaAssunto(assuntoBean.getCodAssunto(), codDocCliente, assuntoBean.getCodArea());
 
             List<ValorCampoBean> campos = new ArrayList<ValorCampoBean>();
             ValorCampoBean valorCampo = new ValorCampoBean("ativo", false);
@@ -471,7 +640,6 @@ public abstract class IntegradorBase extends IntegradorMcFile {
 
             chamaAtualizaDocumentoMcFile(codDocassunto, AssuntoBean.COD_TIPO_DOC, campos);
         } catch (Exception e) {
-            Funcoes.trataErro(e, this);
             throw e;
         }
 
@@ -486,8 +654,7 @@ public abstract class IntegradorBase extends IntegradorMcFile {
     protected void removeClienteMcFile(ClienteBean clienteJuridicoBean) throws Exception {
 
         try {
-            int codDocCliente = pesquisaCliente(clienteJuridicoBean.getCodCliente(),
-                    clienteJuridicoBean.getCodCliente());
+            int codDocCliente = pesquisaCliente(clienteJuridicoBean.getCodCliente(), clienteJuridicoBean.getCodArea());
 
             List<ValorCampoBean> campos = new ArrayList<ValorCampoBean>();
 
@@ -496,7 +663,6 @@ public abstract class IntegradorBase extends IntegradorMcFile {
 
             chamaAtualizaDocumentoMcFile(codDocCliente, ClienteBean.COD_TIPO_DOC, campos);
         } catch (Exception e) {
-            Funcoes.trataErro(e, this);
             throw e;
         }
     }
@@ -536,7 +702,7 @@ public abstract class IntegradorBase extends IntegradorMcFile {
         ValorCampoBean campoTipoassunto = new ValorCampoBean("TIPO", assunto.getTipoAssunto());
         listaCamposassunto.add(campoTipoassunto);
 
-        ValorCampoBean campoNumeroContrato = new ValorCampoBean("NUMERO", assunto.getCodassunto());
+        ValorCampoBean campoNumeroContrato = new ValorCampoBean("NUMERO", assunto.getCodAssunto());
         listaCamposassunto.add(campoNumeroContrato);
 
         ValorCampoBean campoTituloContrato = new ValorCampoBean("TITULO", assunto.getNomeAssunto());
@@ -572,4 +738,66 @@ public abstract class IntegradorBase extends IntegradorMcFile {
         return listaCamposassunto;
     }
 
+    /**
+     * Retorna lista de assuntos com o status passado como parametro
+     *
+     * @param status
+     * @return
+     */
+    protected abstract List<AssuntoBean> getAssuntos(TipoStatus status) throws Exception;
+
+    /**
+     * Retorna lista de clientes com o status passado como parametro
+     *
+     * @param status
+     * @return
+     */
+    protected abstract List<ClienteBean> getClientes(TipoStatus status) throws Exception;
+
+    /**
+     * Efetua procedimento para informar que o assunto foi integrado com sucesso
+     *
+     * @param nomeTabela
+     * @param codigo
+     * @throws BDException
+     */
+    protected abstract void assuntoIntegrado(AssuntoBean assunto) throws BDException;
+
+    /**
+     * Efetua procedimento para informar que cliente foi integrado com sucesso
+     *
+     * @param nomeTabela
+     * @param codigo
+     * @throws BDException
+     */
+    protected abstract void clienteIntegrado(ClienteBean cliente) throws BDException;
+
+    /**
+     * Define se o integrador usa acesso a banco de dados
+     *
+     * @return
+     */
+    protected abstract boolean isBD();
+
+    /**
+     * Define se o integrador fará login no sistema
+     *
+     * @return
+     */
+    protected abstract boolean isLogin();
+
+    public int getIdSessao() {
+
+        return idSessao;
+    }
+
+    public Configuracao getConfiguracao() {
+
+        return configuracao;
+    }
+
+    public void setConfiguracao(Configuracao configuracao) {
+
+        this.configuracao = configuracao;
+    }
 }
