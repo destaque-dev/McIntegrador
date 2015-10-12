@@ -1,6 +1,6 @@
 package exception;
 
-public class BDException extends IntegradorException {
+public class BDException extends Exception {
 
     private static final long serialVersionUID = 7401993256644989333L;
 

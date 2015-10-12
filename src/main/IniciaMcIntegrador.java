@@ -9,80 +9,79 @@ import exception.IntegradorException;
 
 public class IniciaMcIntegrador {
 
-    private static boolean stop = false;
+	private static boolean stop = false;
 
-    public static void start(String[] args) {
+	public static void start(String[] args) {
 
-        try {
-            Log.info("Iniciando McIntegrador...");
+		try {
+			Log.info("Iniciando McIntegrador...");
 
-            Configuracao configuracao = Configuracao.getInstance();
+			Configuracao configuracao = Configuracao.getInstance();
 
-            IntegradorBase integrador = montaIntegrador(configuracao);
+			IntegradorBase integrador = montaIntegrador(configuracao);
 
-            while (!isStop()) {
+			while (!isStop()) {
 
-                try {
-                    integrador.verificaRegistrosNovos();
-                    integrador.verificaRegistrosAtualizados();
-                    integrador.verificaRegistrosRemovidos();
+				try {
+					integrador.verificaRegistrosNovos();
+					integrador.verificaRegistrosAtualizados();
+					integrador.verificaRegistrosRemovidos();
+					integrador.verificaRegistrosEspeciais();
 
-                    // Espera um minuto
-                    Thread.sleep(60000);
-                } catch (Throwable e) {
-                    Funcoes.trataErro(e, integrador);
-                    try {
-                        Thread.sleep(60000);
-                    } catch (InterruptedException e1) {
+					// Espera um minuto
+					Thread.sleep(60000);
+				} catch (Throwable e) {
+					Funcoes.trataErro(e, integrador);
+					try {
+						Thread.sleep(60000);
+					} catch (InterruptedException e1) {
 
-                    }
+					}
 
-                }
+				}
 
-            }
-        } catch (Exception e) {
-            Funcoes.trataErro(e, null);
-        }
+			}
+		} catch (Exception e) {
+			Funcoes.trataErro(e, null);
+		}
 
-    }
+	}
 
-    private static IntegradorBase montaIntegrador(Configuracao configuracao) throws Exception {
+	private static IntegradorBase montaIntegrador(Configuracao configuracao) throws Exception {
+		IntegradorBase integrador = montaIntegrador();
 
-        IntegradorBase integrador = null;
+		if (integrador == null) {
+			throw new IntegradorException("Integrador correto não encontrado, reveja o .properties");
+		}
 
-        integrador = montaIntegrador();
+		integrador.inicializa(configuracao);
 
-        if (integrador == null) {
-            throw new IntegradorException("Integrador correto não encontrado, reveja o .properties");
-        }
+		return integrador;
+	}
 
-        integrador.setConfiguracao(configuracao);
-        return integrador;
-    }
+	public static void stop(String[] args) {
 
-    public static void stop(String[] args) {
+		Log.info("Parando McIntegrador");
+		stop = true;
+	}
 
-        Log.info("Parando McIntegrador");
-        stop = true;
-    }
+	public static void main(String[] args) {
 
-    public static void main(String[] args) {
+		if (args == null || args.length == 0 || "start".equals(args[0])) {
+			start(args);
+		} else if ("stop".equals(args[0])) {
+			stop(args);
+		}
+	}
 
-        if (args == null || args.length == 0 || "start".equals(args[0])) {
-            start(args);
-        } else if ("stop".equals(args[0])) {
-            stop(args);
-        }
-    }
+	public static boolean isStop() {
 
-    public static boolean isStop() {
+		return stop;
+	}
 
-        return stop;
-    }
+	public static IntegradorBase montaIntegrador() throws Exception {
 
-    public static IntegradorBase montaIntegrador() throws Exception {
-
-        return new IntegradorExemplo();
-    }
+		return new IntegradorExemplo();
+	}
 
 }
