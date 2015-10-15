@@ -4,6 +4,8 @@ public class ClienteBean {
 
     public static int COD_TIPO_DOC = 1553944;
 
+    private int idUnicoCliente;
+
     private String codCliente;
 
     private String nomeCliente;
@@ -98,6 +100,16 @@ public class ClienteBean {
     public void setSituacao(String situacao) {
 
         this.situacao = situacao;
+    }
+
+    public int getIdUnicoCliente() {
+
+        return idUnicoCliente;
+    }
+
+    public void setIdUnicoCliente(int idUnicoCliente) {
+
+        this.idUnicoCliente = idUnicoCliente;
     }
 
 }

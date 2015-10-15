@@ -6,6 +6,8 @@ public class AssuntoBean {
 
     public static int COD_TIPO_DOC = 236;
 
+    private int idUnicoAssunto;
+
     private String codAssunto;
 
     private String nomeAssunto;
@@ -184,6 +186,16 @@ public class AssuntoBean {
     public void setCodCliente(String codCliente) {
 
         this.codCliente = codCliente;
+    }
+
+    public int getIdUnicoAssunto() {
+
+        return idUnicoAssunto;
+    }
+
+    public void setIdUnicoAssunto(int idUnicoAssunto) {
+
+        this.idUnicoAssunto = idUnicoAssunto;
     }
 
 }
