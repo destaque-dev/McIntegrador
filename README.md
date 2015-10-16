@@ -3,7 +3,7 @@ Para utilizar o McIntegrador é necessário 3 passos.
 
 ###1 - Configurar arquivo integrador.properties###
 
-Arquivo com as informações necessárias para a integração: acesso ao banco de dados e ao McFile. Fica dentro do pacote util do projeto.
+Arquivo com as informações necessárias para a integração: acesso ao banco de dados e chave de integração com o McFile. Fica dentro do pacote util do projeto.
 
 ###2 - Criar classe de integração###
 
