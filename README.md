@@ -3,13 +3,15 @@ Para utilizar o McIntegrador é necessário 3 passos.
 
 ###1 - Configurar arquivo integrador.properties###
 
-Arquivo com as informações necessárias para a integração: acesso ao banco de dados e ao McFile. Fica dentro do pacote util do projeto.
+Arquivo com as informações necessárias para a integração: acesso ao banco de dados e chave de integração com o McFile. Fica dentro do pacote util do projeto.
 
-###2 - Criar classe de integração###
+###2 - Criar classe de integração e configurar Log###
 
-Extender classe IntegradorBase e implementar os métodos abstratos obrigatórios. Para mais informações sobre os métodos, consultar o JavaDoc.
+Estender classe IntegradorBase e implementar os métodos abstratos obrigatórios. Para mais informações sobre os métodos e utilização, consultar a classe de exemplo integracao.IntegradorExemplo.
 
-Após a criação da classe, necessário instanciá-la e retorná-la no método montaIntegrador() dentro da Classe IniciaMcIntegrador.
+Após a criação da classe, necessário instanciá-la e retorná-la no método montaIntegrador() dentro da Classe IniciaMcIntegrador. A classe de exemplo já está sendo retornada.
+
+Para configurar o log, basta preencher o caminho do mesmo no arquivo log4j.properties.
 
 ###3 - Configurar o McIntegrador como Serviço###
 
@@ -23,7 +25,6 @@ Necessário configurar dentro do BAT:
 
 <ul>
 <li>Caminho do prunsrv.exe (PR_INSTALL)<br />
-<li>Caminho dos logs (PR_LOGPATH)<br />
 <li>Caminho do McIntegrador.jar gerado (PR_CLASSPATH)<br />
 <li>Caminho do jvm.dll do java no servidor. (PR_JVM) <b>(Necessário Java 5 ou superior)</b><br />
 </ul>
