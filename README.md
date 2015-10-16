@@ -7,9 +7,9 @@ Arquivo com as informações necessárias para a integração: acesso ao banco d
 
 ###2 - Criar classe de integração###
 
-Extender classe IntegradorBase e implementar os métodos abstratos obrigatórios. Para mais informações sobre os métodos, consultar o JavaDoc.
+Estender classe IntegradorBase e implementar os métodos abstratos obrigatórios. Para mais informações sobre os métodos e utilização, consultar a classe de exemplo integracao.IntegradorExemplo.
 
-Após a criação da classe, necessário instanciá-la e retorná-la no método montaIntegrador() dentro da Classe IniciaMcIntegrador.
+Após a criação da classe, necessário instanciá-la e retorná-la no método montaIntegrador() dentro da Classe IniciaMcIntegrador. A classe de exemplo já está sendo retornada.
 
 ###3 - Configurar o McIntegrador como Serviço###
 
