@@ -23,7 +23,6 @@ Necessário configurar dentro do BAT:
 
 <ul>
 <li>Caminho do prunsrv.exe (PR_INSTALL)<br />
-<li>Caminho dos logs (PR_LOGPATH)<br />
 <li>Caminho do McIntegrador.jar gerado (PR_CLASSPATH)<br />
 <li>Caminho do jvm.dll do java no servidor. (PR_JVM) <b>(Necessário Java 5 ou superior)</b><br />
 </ul>
