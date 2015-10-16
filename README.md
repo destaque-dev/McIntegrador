@@ -11,7 +11,7 @@ Estender classe IntegradorBase e implementar os métodos abstratos obrigatórios
 
 Após a criação da classe, necessário instanciá-la e retorná-la no método montaIntegrador() dentro da Classe IniciaMcIntegrador. A classe de exemplo já está sendo retornada.
 
-Para configurar o log, basta preencher o caminho do mesmo no arquivo log4j.properties.
+Para configurar o log, basta preencher o arquivo log4j.properties com o caminho e configurações desejadas. Esse arquivo deve ficar na mesma pasta do McIntegrador.jar.
 
 ###3 - Configurar o McIntegrador como Serviço###
 
