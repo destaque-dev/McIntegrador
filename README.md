@@ -5,11 +5,13 @@ Para utilizar o McIntegrador é necessário 3 passos.
 
 Arquivo com as informações necessárias para a integração: acesso ao banco de dados e chave de integração com o McFile. Fica dentro do pacote util do projeto.
 
-###2 - Criar classe de integração###
+###2 - Criar classe de integração e configurar Log###
 
 Estender classe IntegradorBase e implementar os métodos abstratos obrigatórios. Para mais informações sobre os métodos e utilização, consultar a classe de exemplo integracao.IntegradorExemplo.
 
 Após a criação da classe, necessário instanciá-la e retorná-la no método montaIntegrador() dentro da Classe IniciaMcIntegrador. A classe de exemplo já está sendo retornada.
+
+Para configurar o log, basta preencher o caminho do mesmo no arquivo log4j.properties.
 
 ###3 - Configurar o McIntegrador como Serviço###
 
