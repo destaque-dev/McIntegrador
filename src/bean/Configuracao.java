@@ -8,141 +8,157 @@ import exception.IntegradorException;
 
 public class Configuracao {
 
-    private String host;
+	private String host;
 
-    private String porta;
+	private String porta;
 
-    private String tipoBD;
+	private String tipoBD;
 
-    private String dataBase;
+	private String dataBase;
 
-    private String login;
+	private String login;
 
-    private String senha;
+	private String senha;
 
-    private String loginMcFile;
+	private String loginMcFile;
 
-    private String senhaMcFile;
+	private String senhaMcFile;
 
-    private Configuracao() throws Exception {
+	private String chaveIntegracao;
 
-        try {
-            ResourceBundle bundle = null;
-            try {
-                bundle = ResourceBundle.getBundle("integrador");
-            } catch (MissingResourceException e) {
-                try {
-                    bundle = ResourceBundle.getBundle("util/integrador");
-                } catch (MissingResourceException e1) {
-                    throw new IntegradorException("Arquivo de propriedades integrador não encontrado.\n"
-                            + e.getMessage(), e1);
-                }
-            }
+	private Configuracao() throws Exception {
 
-            host = bundle.getString("host");
-            porta = bundle.getString("porta");
-            tipoBD = bundle.getString("tipoBD");
-            dataBase = bundle.getString("dataBase");
-            login = bundle.getString("login");
-            senha = bundle.getString("senha");
-            loginMcFile = bundle.getString("loginMcFile");
-            senhaMcFile = bundle.getString("senhaMcFile");
+		try {
+			ResourceBundle bundle = null;
+			try {
+				bundle = ResourceBundle.getBundle("integrador");
+			} catch (MissingResourceException e) {
+				try {
+					bundle = ResourceBundle.getBundle("util/integrador");
+				} catch (MissingResourceException e1) {
+					throw new IntegradorException("Arquivo de propriedades integrador não encontrado.\n"
+							+ e.getMessage(), e1);
+				}
+			}
 
-        } catch (Exception e) {
-            Log.error("Erro iniciando properties", e);
-            throw e;
-        }
-    }
+			host = bundle.getString("host");
+			porta = bundle.getString("porta");
+			tipoBD = bundle.getString("tipoBD");
+			dataBase = bundle.getString("dataBase");
+			login = bundle.getString("login");
+			senha = bundle.getString("senha");
 
-    private static Configuracao configuracao;
+			if(bundle.containsKey("loginMcFile") && bundle.containsKey("senhaMcFile")){
+				loginMcFile = bundle.getString("loginMcFile");
+				senhaMcFile = bundle.getString("senhaMcFile");
+			}
 
-    public static synchronized Configuracao getInstance() throws Exception {
+			if(bundle.containsKey("chave")){
+				chaveIntegracao = bundle.getString("chave");
+			}
 
-        if (configuracao == null) {
-            configuracao = new Configuracao();
-        }
+		} catch (Exception e) {
+			Log.error("Erro iniciando properties", e);
+			throw e;
+		}
+	}
 
-        return configuracao;
-    }
+	private static Configuracao configuracao;
 
-    public String getHost() {
+	public static synchronized Configuracao getInstance() throws Exception {
 
-        return host;
-    }
+		if (configuracao == null) {
+			configuracao = new Configuracao();
+		}
 
-    public void setHost(String host) {
+		return configuracao;
+	}
 
-        this.host = host;
-    }
+	public String getHost() {
 
-    public String getPorta() {
+		return host;
+	}
 
-        return porta;
-    }
+	public void setHost(String host) {
 
-    public void setPorta(String porta) {
+		this.host = host;
+	}
 
-        this.porta = porta;
-    }
+	public String getPorta() {
 
-    public String getTipoBD() {
+		return porta;
+	}
 
-        return tipoBD;
-    }
+	public void setPorta(String porta) {
 
-    public void setTipoBD(String tipoBD) {
+		this.porta = porta;
+	}
 
-        this.tipoBD = tipoBD;
-    }
+	public String getTipoBD() {
 
-    public String getDataBase() {
+		return tipoBD;
+	}
 
-        return dataBase;
-    }
+	public void setTipoBD(String tipoBD) {
 
-    public void setDataBase(String dataBase) {
+		this.tipoBD = tipoBD;
+	}
 
-        this.dataBase = dataBase;
-    }
+	public String getDataBase() {
 
-    public String getLogin() {
+		return dataBase;
+	}
 
-        return login;
-    }
+	public void setDataBase(String dataBase) {
 
-    public void setLogin(String login) {
+		this.dataBase = dataBase;
+	}
 
-        this.login = login;
-    }
+	public String getLogin() {
 
-    public String getSenha() {
+		return login;
+	}
 
-        return senha;
-    }
+	public void setLogin(String login) {
 
-    public void setSenha(String senha) {
+		this.login = login;
+	}
 
-        this.senha = senha;
-    }
+	public String getSenha() {
 
-    public String getLoginMcFile() {
+		return senha;
+	}
 
-        return loginMcFile;
-    }
+	public void setSenha(String senha) {
 
-    public void setLoginMcFile(String loginMcFile) {
+		this.senha = senha;
+	}
 
-        this.loginMcFile = loginMcFile;
-    }
+	public String getLoginMcFile() {
 
-    public String getSenhaMcFile() {
+		return loginMcFile;
+	}
 
-        return senhaMcFile;
-    }
+	public void setLoginMcFile(String loginMcFile) {
 
-    public void setSenhaMcFile(String senhaMcFile) {
+		this.loginMcFile = loginMcFile;
+	}
 
-        this.senhaMcFile = senhaMcFile;
-    }
+	public String getSenhaMcFile() {
 
+		return senhaMcFile;
+	}
+
+	public void setSenhaMcFile(String senhaMcFile) {
+
+		this.senhaMcFile = senhaMcFile;
+	}
+
+	public String getChaveIntegracao() {
+		return chaveIntegracao;
+	}
+
+	public void setChaveIntegracao(String chaveIntegracao) {
+		this.chaveIntegracao = chaveIntegracao;
+	}
 }

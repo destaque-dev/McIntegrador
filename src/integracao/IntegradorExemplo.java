@@ -65,6 +65,7 @@ public class IntegradorExemplo extends IntegradorBase {
                 String foro = res.getString("FORO");
                 String parte = res.getString("PARTE");
                 String partePrincipal = res.getString("PARTE_PRINCIPAL");
+                String ramo = res.getString("RAMO");
 
                 if (tituloAssunto == null) {
                     tituloAssunto = parte + " - " + numProcesso;
@@ -85,6 +86,7 @@ public class IntegradorExemplo extends IntegradorBase {
                 assuntoBean.setForo(foro);
                 assuntoBean.setVara(vara);
                 assuntoBean.setPartePrincipal(partePrincipal);
+                assuntoBean.setRamo(ramo);
 
                 casos.add(assuntoBean);
             }
@@ -134,12 +136,6 @@ public class IntegradorExemplo extends IntegradorBase {
 
     @Override
     protected boolean isBD() {
-
-        return true;
-    }
-
-    @Override
-    protected boolean isLogin() {
 
         return true;
     }

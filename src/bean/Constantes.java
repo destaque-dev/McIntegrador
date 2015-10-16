@@ -43,5 +43,7 @@ public class Constantes {
     public static int NIVEL_ASSUNTO_JURIDICO = 2;
 
     public static String URL_MCFILE = "https://mcfile.eu/mcfile/";
+    
+    public static String URL_MCFILE_SERVICOS = Constantes.URL_MCFILE + Constantes.CTRL_SERVICOS;
 
 }
