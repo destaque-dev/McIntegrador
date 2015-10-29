@@ -81,9 +81,7 @@ public class Funcoes {
 
 	public static void trataErro(Throwable e, IntegradorBase integrador) {
 
-		if (e instanceof HttpStatusException) {
-			Log.error("Erro em McIntegrador", e);
-		} else if (e instanceof BDException && integrador instanceof IntegradorBase) {
+		if (e instanceof BDException) {
 			try {
 				Log.error("Erro de banco de dados", e);
 				integrador.conectaBancoDados();
