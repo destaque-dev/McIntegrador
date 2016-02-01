@@ -25,13 +25,20 @@ public class ConexaoIntegrador {
             String url = getUrl(intTipoBD, Configuracao.getInstance().getHost(), Configuracao.getInstance().getPorta(),
                     Configuracao.getInstance().getDataBase());
 
-            this.conexao = DriverManager.getConnection(url, Configuracao.getInstance().getLogin(), Configuracao
-                    .getInstance().getSenha());
+            this.conexao = DriverManager.getConnection(url, Configuracao.getInstance().getLogin(),
+                    Configuracao.getInstance().getSenha());
         } catch (Exception e) {
             new BDException("Erro iniciando conexão", e);
         }
 
         validaConexao(intTipoBD);
+    }
+
+    public ConexaoIntegrador(Connection conexao, int tipoConexao) throws BDException {
+
+        this.conexao = conexao;
+        validaConexao(tipoConexao);
+
     }
 
     public String getDriver(int tipo) {
@@ -104,11 +111,21 @@ public class ConexaoIntegrador {
         }
     }
 
-    public void close() throws SQLException {
+    public void close() {
 
-        if (conexao != null) {
-            conexao.close();
+        try {
+            if (conexao != null && !conexao.isClosed()) {
+                try {
+                    conexao.rollback();
+                } catch (Exception e) {
+                    Log.error("Não deu o rollback ao liberar a conexao", e);
+                }
+                conexao.close();
+            }
+        } catch (SQLException e) {
+            Log.error("Erro em close de conexão", e);
         }
+
     }
 
     public ResultBD executeQuery(String sql, Object... parametros) throws BDException {
@@ -121,8 +138,8 @@ public class ConexaoIntegrador {
             }
             return new ResultBD(st.executeQuery());
         } catch (SQLException e) {
-            throw new BDException("Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros "
-                    + parametros, e);
+            throw new BDException(
+                    "Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros " + parametros, e);
         }
     }
 
@@ -148,8 +165,8 @@ public class ConexaoIntegrador {
             }
             return st.executeUpdate();
         } catch (SQLException e) {
-            throw new BDException("Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros "
-                    + parametros, e);
+            throw new BDException(
+                    "Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros " + parametros, e);
         } finally {
             closeStatement(st);
         }
