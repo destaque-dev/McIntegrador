@@ -38,6 +38,10 @@ public class AssuntoBean {
 
     private String nomeCliente;
 
+    private String codPasta;
+
+    private String observacao;
+
     public String getNomeAssunto() {
 
         return nomeAssunto;
@@ -198,4 +202,23 @@ public class AssuntoBean {
         this.idUnicoAssunto = idUnicoAssunto;
     }
 
+    public String getCodPasta() {
+
+        return codPasta;
+    }
+
+    public void setCodPasta(String codPasta) {
+
+        this.codPasta = codPasta;
+    }
+
+    public String getObservacao() {
+
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+
+        this.observacao = observacao;
+    }
 }
