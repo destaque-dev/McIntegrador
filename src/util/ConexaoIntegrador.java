@@ -21,14 +21,16 @@ public class ConexaoIntegrador {
         int intTipoBD = TipoBD.validacao(tipoBD);
 
         try {
+
             Class.forName(getDriver(intTipoBD));
             String url = getUrl(intTipoBD, Configuracao.getInstance().getHost(), Configuracao.getInstance().getPorta(),
                     Configuracao.getInstance().getDataBase());
 
-            this.conexao = DriverManager.getConnection(url, Configuracao.getInstance().getLogin(),
-                    Configuracao.getInstance().getSenha());
+            this.conexao = DriverManager.getConnection(url, Configuracao.getInstance().getLogin(), Configuracao
+                    .getInstance().getSenha());
+
         } catch (Exception e) {
-            new BDException("Erro iniciando conexão", e);
+            throw new BDException("Erro iniciando conexão", e);
         }
 
         validaConexao(intTipoBD);
@@ -138,8 +140,8 @@ public class ConexaoIntegrador {
             }
             return new ResultBD(st.executeQuery());
         } catch (SQLException e) {
-            throw new BDException(
-                    "Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros " + parametros, e);
+            throw new BDException("Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros "
+                    + parametros, e);
         }
     }
 
@@ -165,8 +167,8 @@ public class ConexaoIntegrador {
             }
             return st.executeUpdate();
         } catch (SQLException e) {
-            throw new BDException(
-                    "Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros " + parametros, e);
+            throw new BDException("Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros "
+                    + parametros, e);
         } finally {
             closeStatement(st);
         }
