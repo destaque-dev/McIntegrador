@@ -444,6 +444,14 @@ public abstract class IntegradorBase {
 		if(assuntoBean.getPartePrincipal() != null){
 			conAssunto.data(ParametrosIntegracao.PARAM_PARTE_PRINCIPAL, assuntoBean.getPartePrincipal());
 		}
+		
+		if(assuntoBean.getCodPasta() != null){
+			conAssunto.data(ParametrosIntegracao.PARAM_COD_PASTA, assuntoBean.getCodPasta());
+		}
+		
+		if(assuntoBean.getObservacao() != null){
+			conAssunto.data(ParametrosIntegracao.PARAM_OBSERVACAO, assuntoBean.getObservacao());
+		}
 
 		conAssunto.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		conAssunto.timeout(0);

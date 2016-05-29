@@ -5,6 +5,8 @@ import java.io.File;
 public class AssuntoBean {
 
     public static int COD_TIPO_DOC = 236;
+    
+    public static int COD_TIPO_DOC_PASTA = 4784;
 
     private int idUnicoAssunto;
 

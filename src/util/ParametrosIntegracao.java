@@ -50,6 +50,10 @@ public class ParametrosIntegracao {
 
 	public static String PARAM_PARTE_PRINCIPAL = "partePrincipal";
 	
+	public static String PARAM_COD_PASTA = "pasta";
+	
+	public static String PARAM_OBSERVACAO = "observacao";
+	
 	public static String CHAMADA_INTEGRA_ASSUNTO = "INTEGRAASSUNTO";
 
 	public static String CHAMADA_INTEGRA_CLIENTE = "INTEGRACLIENTE";
