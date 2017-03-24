@@ -5,7 +5,7 @@ import java.io.File;
 public class AssuntoBean {
 
     public static int COD_TIPO_DOC = 236;
-    
+
     public static int COD_TIPO_DOC_PASTA = 4784;
 
     private int idUnicoAssunto;
@@ -43,6 +43,8 @@ public class AssuntoBean {
     private String codPasta;
 
     private String observacao;
+
+    private int codClienteMcFile;
 
     public String getNomeAssunto() {
 
@@ -222,5 +224,15 @@ public class AssuntoBean {
     public void setObservacao(String observacao) {
 
         this.observacao = observacao;
+    }
+
+    public int getCodClienteMcFile() {
+
+        return codClienteMcFile;
+    }
+
+    public void setCodClienteMcFile(int codClienteMcFile) {
+
+        this.codClienteMcFile = codClienteMcFile;
     }
 }

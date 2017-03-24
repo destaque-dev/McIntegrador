@@ -12,38 +12,40 @@ public class Constantes {
 
     public static final String ATV_LOGIN_CLIENT_COM_SESSAO = "LOGIN_SESSAO";
 
-    public static String PARAM_VALORES_CAMPOS = "fields";
+    public static final String PARAM_VALORES_CAMPOS = "fields";
 
-    public static String PARAM_AVANCADOS = "advancedParameters";
+    public static final String PARAM_AVANCADOS = "advancedParameters";
 
-    public static String PARAM_NIVEL_ARVORE = "level";
+    public static final String PARAM_NIVEL_ARVORE = "level";
 
-    public static String PARAM_CODIGO_PAI = "fatherID";
+    public static final String PARAM_CODIGO_PAI = "fatherID";
 
-    public static String PARAM_ARVORE = "treeID";
+    public static final String PARAM_ARVORE = "treeID";
 
-    public static String PARAM_CMD = "cmd";
+    public static final String PARAM_CMD = "cmd";
 
-    public static String PARAM_COD_TIPO_DOC = "codTipoDoc";
+    public static final String PARAM_COD_TIPO_DOC = "codTipoDoc";
 
-    public static String PARAM_COD_DOC = "codDoc";
+    public static final String PARAM_COD_DOC = "codDoc";
 
-    public static String PARAM_ID_SESSAO = "idSessao";
+    public static final String PARAM_ID_SESSAO = "idSessao";
 
-    public static String PARAM_COD_AREA = "codArea";
+    public static final String PARAM_COD_AREA = "codArea";
 
-    public static String PARAM_LOGIN = "conta";
+    public static final String PARAM_LOGIN = "conta";
 
-    public static String PARAM_SENHA = "senha";
+    public static final String PARAM_SENHA = "senha";
 
-    public static int ARVORE_JURIDICA = 5;
+    public static final String PARAM_COD_CLIENTE = "codCliente";
 
-    public static int NIVEL_CLIENTE_JURIDICO = 1;
+    public static final int ARVORE_JURIDICA = 5;
 
-    public static int NIVEL_ASSUNTO_JURIDICO = 2;
+    public static final int NIVEL_CLIENTE_JURIDICO = 1;
 
-    public static String URL_MCFILE = "https://mcfile.eu/mcfile/";
-    
-    public static String URL_MCFILE_SERVICOS = Constantes.URL_MCFILE + Constantes.CTRL_SERVICOS;
+    public static final int NIVEL_ASSUNTO_JURIDICO = 2;
+
+    public static final String URL_MCFILE = "http://localhost/mcfile/";
+
+    public static final String URL_MCFILE_SERVICOS = Constantes.URL_MCFILE + Constantes.CTRL_SERVICOS;
 
 }

@@ -22,6 +22,8 @@ public class ClienteBean {
 
     private int codArea;
 
+    private int codClienteMcFile;
+
     public String getCodCliente() {
 
         return codCliente;
@@ -112,4 +114,13 @@ public class ClienteBean {
         this.idUnicoCliente = idUnicoCliente;
     }
 
+    public int getCodClienteMcFile() {
+
+        return codClienteMcFile;
+    }
+
+    public void setCodClienteMcFile(int codClienteMcFile) {
+
+        this.codClienteMcFile = codClienteMcFile;
+    }
 }
