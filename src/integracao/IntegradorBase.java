@@ -30,7 +30,7 @@ public abstract class IntegradorBase {
 			Log.info("Conectou banco de dados");
 		}
 	}
-	
+
 	/**
 	 * Inicia conexao ao banco de dados
 	 *
@@ -45,7 +45,7 @@ public abstract class IntegradorBase {
 			throw e;
 		}
 	}
-	
+
 	/**
 	 * Verifica novos registros a serem inseridos na base e os insere, caso encontre
 	 *
@@ -390,11 +390,51 @@ public abstract class IntegradorBase {
 
 
 	protected void trataAssuntoEspecial(AssuntoBean assuntoBean) throws Exception{
+		
+		try {
+			if (isBD()) {
+				iniciaTransacao();
 
+				assuntoIntegrado(assuntoBean);
+				chamaApiIntegracaoAssunto(assuntoBean, TipoStatus.ESPECIAL);
+
+				commit();
+			} else {
+				chamaApiIntegracaoAssunto(assuntoBean, TipoStatus.ESPECIAL);
+				assuntoIntegrado(assuntoBean);
+			}
+			Log.info("assunto " + assuntoBean.getCodAssunto() + " do cliente " + assuntoBean.getCodCliente()
+			+ "  enviado para integração");
+		} catch (Exception e) {
+			if (isBD()) {
+				rollback();
+			}
+			Funcoes.trataErro(e, this);
+		}
 	}
 
 	protected void trataClienteEspecial(ClienteBean clienteJuridicoBean) throws Exception{
+		
+		try {
+			if (isBD()) {
+				iniciaTransacao();
 
+				clienteIntegrado(clienteJuridicoBean);
+				chamaApiIntegracaoCliente(clienteJuridicoBean, TipoStatus.ESPECIAL);
+
+				commit();
+			} else {
+				chamaApiIntegracaoCliente(clienteJuridicoBean, TipoStatus.ESPECIAL);
+				clienteIntegrado(clienteJuridicoBean);
+			}
+
+			Log.info("Cliente " + clienteJuridicoBean.getCodCliente() + " enviado para integração");
+		} catch (Exception e) {
+			if (isBD()) {
+				rollback();
+			}
+			Funcoes.trataErro(e, this);
+		}
 	}
 
 	/**
@@ -416,39 +456,39 @@ public abstract class IntegradorBase {
 		conAssunto.data(ParametrosIntegracao.PARAM_COD_CLIENTE, assuntoBean.getCodCliente());
 		conAssunto.data(ParametrosIntegracao.PARAM_TITULO_ASSUNTO, assuntoBean.getNomeAssunto());
 		conAssunto.data(ParametrosIntegracao.PARAM_TIPO_ASSUNTO, assuntoBean.getTipoAssunto());
-		
+
 		if(assuntoBean.getParte() != null){
 			conAssunto.data(ParametrosIntegracao.PARAM_PARTE, assuntoBean.getParte());
 		}
-		
+
 		if(assuntoBean.getRamo() != null){
 			conAssunto.data(ParametrosIntegracao.PARAM_RAMO, assuntoBean.getRamo());
 		}
-		
+
 		if(assuntoBean.getNumProcesso() != null){
 			conAssunto.data(ParametrosIntegracao.PARAM_NUMERO_PROCESSO, assuntoBean.getNumProcesso());
 		}
-		
+
 		if(assuntoBean.getVara() != null){
 			conAssunto.data(ParametrosIntegracao.PARAM_VARA, assuntoBean.getVara());
 		}
-		
+
 		if(assuntoBean.getForo() != null){
 			conAssunto.data(ParametrosIntegracao.PARAM_FORO, assuntoBean.getForo());
 		}
-		
+
 		if(assuntoBean.getTipoAcao() != null){
 			conAssunto.data(ParametrosIntegracao.PARAM_ACAO, assuntoBean.getTipoAcao());
 		}
-		
+
 		if(assuntoBean.getPartePrincipal() != null){
 			conAssunto.data(ParametrosIntegracao.PARAM_PARTE_PRINCIPAL, assuntoBean.getPartePrincipal());
 		}
-		
+
 		if(assuntoBean.getCodPasta() != null){
 			conAssunto.data(ParametrosIntegracao.PARAM_COD_PASTA, assuntoBean.getCodPasta());
 		}
-		
+
 		if(assuntoBean.getObservacao() != null){
 			conAssunto.data(ParametrosIntegracao.PARAM_OBSERVACAO, assuntoBean.getObservacao());
 		}
@@ -468,27 +508,27 @@ public abstract class IntegradorBase {
 
 		conCliente.data(ParametrosIntegracao.PARAM_COD_CLIENTE, clienteJuridicoBean.getCodCliente());
 		conCliente.data(ParametrosIntegracao.PARAM_RAZAO_SOCIAL, clienteJuridicoBean.getNomeCliente());
-		
+
 		if(clienteJuridicoBean.getNomeFantasia() != null){
 			conCliente.data(ParametrosIntegracao.PARAM_NOME_FANTASIA, clienteJuridicoBean.getNomeFantasia());
 		}
-		
+
 		if(clienteJuridicoBean.getCnpj() != null){
 			conCliente.data(ParametrosIntegracao.PARAM_CNPJ, clienteJuridicoBean.getCnpj());
 		}
-		
+
 		if(clienteJuridicoBean.getTipoCliente() != null){
 			conCliente.data(ParametrosIntegracao.PARAM_TIPO_CLIENTE, clienteJuridicoBean.getTipoCliente());
 		}
-		
+
 		if(clienteJuridicoBean.getTipoPessoa() != null){
 			conCliente.data(ParametrosIntegracao.PARAM_TIPO_PESSOA, clienteJuridicoBean.getTipoPessoa());
 		}
-		
+
 		if(clienteJuridicoBean.getSituacao() != null){
 			conCliente.data(ParametrosIntegracao.PARAM_SITUACAO, clienteJuridicoBean.getSituacao());
 		}
-		
+
 
 		conCliente.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		conCliente.timeout(0);
