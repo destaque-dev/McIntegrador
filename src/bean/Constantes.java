@@ -1,5 +1,7 @@
 package bean;
 
+import java.util.ResourceBundle;
+
 public class Constantes {
 
     public static final String CTRL_SERVICOS = "CtrlServicos";
@@ -45,6 +47,14 @@ public class Constantes {
     public static final int NIVEL_ASSUNTO_JURIDICO = 2;
 
     public static String URL_MCFILE = "https://my.mcfile.com/mcfile/";
+    
+    static {
+    	try{
+    		URL_MCFILE = ResourceBundle.getBundle("integrador").getString("URL_MCFILE");
+    	} catch (Exception e){
+    		// URL DEFAULT
+    	}    	
+    }
 
     public static final String URL_MCFILE_SERVICOS = Constantes.URL_MCFILE + Constantes.CTRL_SERVICOS;
 
