@@ -8,6 +8,7 @@ import java.sql.Statement;
 
 import bean.Configuracao;
 import exception.BDException;
+import mcfile.crypt.model.Crypt;
 
 public class ConexaoIntegrador {
 
@@ -26,8 +27,7 @@ public class ConexaoIntegrador {
             String url = getUrl(intTipoBD, Configuracao.getInstance().getHost(), Configuracao.getInstance().getPorta(),
                     Configuracao.getInstance().getDataBase());
 
-            this.conexao = DriverManager.getConnection(url, Configuracao.getInstance().getLogin(), Configuracao
-                    .getInstance().getSenha());
+            this.conexao = DriverManager.getConnection(url, Configuracao.getInstance().getLogin(), Crypt.decryptCipher(Configuracao.getInstance().getSenha()));
 
         } catch (Exception e) {
             throw new BDException("Erro iniciando conexão", e);
@@ -51,6 +51,7 @@ public class ConexaoIntegrador {
             case TipoBD.ORACLE:
             case TipoBD.ORACLE_7:
             case TipoBD.ORACLE_ODA:
+            case TipoBD.ORACLE_WEB:
                 return "oracle.jdbc.driver.OracleDriver";
             case TipoBD.POSTGRE:
                 return "org.postgresql.Driver";
@@ -61,26 +62,41 @@ public class ConexaoIntegrador {
 
     public String getUrl(int tipo, String host, String port, String dataBaseName) {
 
+    	String url = "";
+    	Log.fatal("TipoBD: " + tipo);
         switch (tipo) {
             case TipoBD.SQLSERVER:
                 // Porta default = 1433
                 // return "jdbc:microsoft:sqlserver://" + host + ":" + port + ";DatabaseName=" +
                 // dataBaseName;
-                return "jdbc:jtds:sqlserver://" + host + ":" + port + "/" + dataBaseName;
+            	url = "jdbc:jtds:sqlserver://" + host + ":" + port + "/" + dataBaseName;
+            	break;
             case TipoBD.ORACLE_7:
                 // Neste caso, o HOST é o nome para acessar o banco do TNSNAMES.ORA
-                return "jdbc:oracle:" + host + ":@" + dataBaseName;
+            	url = "jdbc:oracle:" + host + ":@" + dataBaseName;
+            	break;
             case TipoBD.ORACLE:
             case TipoBD.ORACLE_ODA:
                 // Porta default = 1521
-                System.out.println("jdbc:oracle:thin:@" + host + ":" + port + ":" + dataBaseName);
-                return "jdbc:oracle:thin:@" + host + ":" + port + ":" + dataBaseName;
+            	url = "jdbc:oracle:thin:@" + host + ":" + port + "/" + dataBaseName;
+            	break;
+            case TipoBD.ORACLE_WEB:
+            	// Porta default = 1521
+            	url = "jdbc:oracle:thin:@(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = " + host + ")(PORT = " + port + "))"
+        				+ " (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = " + dataBaseName + ") (UR = A) (UR = A)"
+        				+ " (FAILOVER_MODE = (TYPE = select) (METHOD = basic))))";
+            	break;
             case TipoBD.POSTGRE:
                 // Porta default = 5432
-                return "jdbc:postgresql://" + host + ":" + port + "/" + dataBaseName;
+            	url = "jdbc:postgresql://" + host + ":" + port + "/" + dataBaseName;
+            	break;
             default:
-                return "";
+            	url = "";
+            	break;
         }
+        
+        Log.info("url: " + url);
+        return url;
     }
 
     public Connection getConexao() {
@@ -98,6 +114,9 @@ public class ConexaoIntegrador {
                     query = "SELECT 1";
                     break;
                 case TipoBD.ORACLE:
+                case TipoBD.ORACLE_7:
+                case TipoBD.ORACLE_ODA:
+                case TipoBD.ORACLE_WEB:
                     query = "SELECT 1 FROM DUAL";
                     break;
                 case TipoBD.POSTGRE:
@@ -108,7 +127,7 @@ public class ConexaoIntegrador {
             st.executeQuery();
         } catch (SQLException e) {
             throw new BDException(
-                    "A conexão como banco de dados do Themis foi estabelecida, mas a estrutura do banco está inválida pois não foi possível nem mesmo encontrar a tabela de validação.",
+                    "A conexão como banco de dados foi estabelecida, mas a estrutura do banco está inválida pois não foi possível nem mesmo encontrar a tabela de validação.",
                     e);
         }
     }
