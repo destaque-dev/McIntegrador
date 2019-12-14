@@ -15,6 +15,8 @@ public class TipoBD {
     public static final int ORACLE_ODA = 4;
 
     public static final int POSTGRE = 5;
+    
+    public static final int ORACLE_WEB = 6;
 
     public static int validacao(int codigo) {
 
@@ -25,6 +27,8 @@ public class TipoBD {
                 return SQLSERVER;
             case ORACLE:
                 return ORACLE;
+            case ORACLE_WEB:
+                return ORACLE_WEB;
             case ORACLE_7:
                 return ORACLE_7;
             case POSTGRE:
@@ -51,6 +55,8 @@ public class TipoBD {
             return POSTGRE;
         } else if (nome.equalsIgnoreCase("INTRBASE")) {
             return INTERBASE;
+        } else if (nome.equalsIgnoreCase("ORACLEWEB")) {
+            return ORACLE_WEB;
         } else {
             return INDEFINIDO;
         }
@@ -58,7 +64,7 @@ public class TipoBD {
 
     public static boolean isOracle(int codigo) {
 
-        return (codigo == ORACLE) || (codigo == ORACLE_ODA) || (codigo == ORACLE_7);
+        return (codigo == ORACLE) || (codigo == ORACLE_ODA) || (codigo == ORACLE_7) || (codigo == ORACLE_WEB);
     }
 
     public static boolean isSQLServer(int codigo) {
