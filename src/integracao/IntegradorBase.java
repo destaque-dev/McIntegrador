@@ -18,7 +18,7 @@ import util.ParametrosIntegracao;
 
 public abstract class IntegradorBase {
 
-	protected Configuracao configuracao;	
+	protected Configuracao configuracao;
 
 	protected ConexaoIntegrador conexao;
 
@@ -390,7 +390,7 @@ public abstract class IntegradorBase {
 
 
 	protected void trataAssuntoEspecial(AssuntoBean assuntoBean) throws Exception{
-		
+
 		try {
 			if (isBD()) {
 				iniciaTransacao();
@@ -414,7 +414,7 @@ public abstract class IntegradorBase {
 	}
 
 	protected void trataClienteEspecial(ClienteBean clienteJuridicoBean) throws Exception{
-		
+
 		try {
 			if (isBD()) {
 				iniciaTransacao();
@@ -532,7 +532,12 @@ public abstract class IntegradorBase {
 
 		conCliente.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		conCliente.timeout(0);
-		conCliente.post();		
+		conCliente.post();
+	}
+
+	public Configuracao getConfiguracao() {
+
+		return configuracao;
 	}
 
 }
