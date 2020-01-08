@@ -448,11 +448,14 @@ public class HttpUtil {
 				Funcoes.closeQuietly(reader);
 			}
 
+			int responseCode = -1;
 			try {
-				throw new McConnectionException(conn.getResponseCode(), msg, e);
-			} catch (Exception e1) {
+				responseCode = conn.getResponseCode();
+			} catch (Exception ex) {
 				throw new McConnectionException(msg, e);
 			}
+			throw new McConnectionException(responseCode, msg, e);
+
 		}
 		throw new McConnectionException(e);
 	}
