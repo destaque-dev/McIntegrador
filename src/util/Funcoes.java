@@ -84,15 +84,21 @@ public class Funcoes {
 
 	public static void trataErro(Throwable e, IntegradorBase integrador) {
 
+		trataErro(null, e, integrador);
+
+	}
+
+	public static void trataErro(String msg, Throwable e, IntegradorBase integrador) {
+		msg = !isNullOrEmpty(msg) ?  " " + msg : "";
 		if (e instanceof BDException) {
 			try {
-				Log.error("Erro de banco de dados", e);
+				Log.error("Erro de banco de dados." + msg, e);
 				integrador.conectaBancoDados();
 			} catch (Exception e1) {
-				Log.error("Falha ao reconectar ao banco de dados", e);
+				Log.error("Falha ao reconectar ao banco de dados." + msg, e);
 			}
 		} else {
-			Log.error("Erro em McIntegrador", e);
+			Log.error("Erro em McIntegrador." + msg, e);
 		}
 
 	}
