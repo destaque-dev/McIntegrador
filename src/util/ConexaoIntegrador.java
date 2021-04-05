@@ -8,7 +8,6 @@ import java.sql.Statement;
 
 import bean.Configuracao;
 import exception.BDException;
-import mcfile.crypt.model.Crypt;
 
 public class ConexaoIntegrador {
 
@@ -27,7 +26,7 @@ public class ConexaoIntegrador {
             String url = getUrl(intTipoBD, Configuracao.getInstance().getHost(), Configuracao.getInstance().getPorta(),
                     Configuracao.getInstance().getDataBase());
 
-            this.conexao = DriverManager.getConnection(url, Configuracao.getInstance().getLogin(), Crypt.decryptCipher(Configuracao.getInstance().getSenha()));
+            this.conexao = DriverManager.getConnection(url, Configuracao.getInstance().getLogin(), Configuracao.getInstance().getSenha());
 
         } catch (Exception e) {
             throw new BDException("Erro iniciando conexão", e);

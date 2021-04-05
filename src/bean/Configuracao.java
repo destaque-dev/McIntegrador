@@ -1,10 +1,11 @@
 package bean;
 
+import java.util.Base64;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import util.Log;
 import exception.IntegradorException;
+import util.Log;
 
 public class Configuracao {
 
@@ -46,15 +47,15 @@ public class Configuracao {
 			tipoBD = bundle.getString("tipoBD");
 			dataBase = bundle.getString("dataBase");
 			login = bundle.getString("login");
-			senha = bundle.getString("senha");
+			senha = new String(Base64.getDecoder().decode(bundle.getString("senha")));
 
 			if(bundle.containsKey("loginMcFile") && bundle.containsKey("senhaMcFile")){
 				loginMcFile = bundle.getString("loginMcFile");
-				senhaMcFile = bundle.getString("senhaMcFile");
+				senhaMcFile = new String(Base64.getDecoder().decode(bundle.getString("senhaMcFile")));
 			}
 
 			if(bundle.containsKey("chave")){
-				chaveIntegracao = bundle.getString("chave");
+				chaveIntegracao = new String(Base64.getDecoder().decode(bundle.getString("chave")));
 			}
 
 		} catch (Exception e) {

@@ -31,9 +31,8 @@
             <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/jsoup-1.7.1.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/jtds-1.1.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/log4j-1.2.15.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/ojdbc14.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/postgresql-8.3-605.jdbc3.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/crypt.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/ojdbc6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/postgresql-8.3-605.jdbc3.jar"/>            
 		</jar>
 	</target>
 	
