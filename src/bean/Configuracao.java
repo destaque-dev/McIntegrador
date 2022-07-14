@@ -5,6 +5,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import exception.IntegradorException;
+import util.Funcoes;
 import util.Log;
 
 public class Configuracao {
@@ -26,6 +27,8 @@ public class Configuracao {
 	private String senhaMcFile;
 
 	private String chaveIntegracao;
+
+	private int intervaloMinutos;
 
 	private Configuracao() throws Exception {
 
@@ -56,6 +59,13 @@ public class Configuracao {
 
 			if(bundle.containsKey("chave")){
 				chaveIntegracao = new String(Base64.getDecoder().decode(bundle.getString("chave")));
+			}
+
+			if(bundle.containsKey("intervaloMinutos")) {
+				intervaloMinutos = Funcoes.getInteger(bundle.getString("intervaloMinutos"));
+			}
+			if(intervaloMinutos <= 0) {
+				intervaloMinutos = 1; // 1 minuto
 			}
 
 		} catch (Exception e) {
@@ -162,4 +172,13 @@ public class Configuracao {
 	public void setChaveIntegracao(String chaveIntegracao) {
 		this.chaveIntegracao = chaveIntegracao;
 	}
+
+	public int getIntervaloMinutos() {
+		return intervaloMinutos;
+	}
+
+	public void setIntervaloMinutos(int intervaloMinutos) {
+		this.intervaloMinutos = intervaloMinutos;
+	}
+
 }

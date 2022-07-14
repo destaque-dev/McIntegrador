@@ -9,86 +9,89 @@ import util.Log;
 
 public class IniciaMcIntegrador {
 
-    private static boolean stop = false;
+	private static boolean stop = false;
 
-    public static void start(String[] args) {
+	public static void start(String[] args) {
 
-        try {
-            Log.info("Iniciando McIntegrador...");
+		long intervaloMillis = 60000;
 
-            Configuracao configuracao = Configuracao.getInstance();
+		try {
+			Log.info("Iniciando McIntegrador...");
 
-            IntegradorBase integrador = montaIntegrador(configuracao);
+			Configuracao configuracao = Configuracao.getInstance();
+			intervaloMillis = configuracao.getIntervaloMinutos() * 60 * 1000;
 
-            while (!isStop()) {
+			IntegradorBase integrador = montaIntegrador(configuracao);
 
-                try {
-                    integrador.verificaRegistrosNovos();
-                    integrador.verificaRegistrosAtualizados();
-                    integrador.verificaRegistrosRemovidos();
-                    integrador.verificaRegistrosEspeciais();
+			while (!isStop()) {
 
-                    // Espera um minuto
-                    Thread.sleep(60000);
-                } catch (Exception e) {
-                    Funcoes.trataErro(e, integrador);
-                    try {
-                        Thread.sleep(60000);
-                    } catch (InterruptedException e1) {
+				try {
+					integrador.verificaRegistrosNovos();
+					integrador.verificaRegistrosAtualizados();
+					integrador.verificaRegistrosRemovidos();
+					integrador.verificaRegistrosEspeciais();
 
-                    }
+					// Espera minutos
+					Thread.sleep(intervaloMillis);
+				} catch (Exception e) {
+					Funcoes.trataErro(e, integrador);
+					try {
+						Thread.sleep(intervaloMillis);
+					} catch (InterruptedException e1) {
 
-                }
+					}
 
-            }
-        } catch (Exception e) {
-            Funcoes.trataErro(e, null);
-            try {
-                Thread.sleep(60000);
-            } catch (InterruptedException e1) {
+				}
 
-            }
-            start(args);
-        }
+			}
+		} catch (Exception e) {
+			Funcoes.trataErro(e, null);
+			try {
+				Thread.sleep(intervaloMillis);
+			} catch (InterruptedException e1) {
 
-    }
+			}
+			start(args);
+		}
 
-    private static IntegradorBase montaIntegrador(Configuracao configuracao) throws Exception {
+	}
 
-        IntegradorBase integrador = montaIntegrador();
+	private static IntegradorBase montaIntegrador(Configuracao configuracao) throws Exception {
 
-        if (integrador == null) {
-            throw new IntegradorException("Integrador correto não encontrado, reveja o .properties");
-        }
+		IntegradorBase integrador = montaIntegrador();
 
-        integrador.inicializa(configuracao);
+		if (integrador == null) {
+			throw new IntegradorException("Integrador correto não encontrado, reveja o .properties");
+		}
 
-        return integrador;
-    }
+		integrador.inicializa(configuracao);
 
-    public static void stop(String[] args) {
+		return integrador;
+	}
 
-        Log.info("Parando McIntegrador");
-        stop = true;
-    }
+	public static void stop(String[] args) {
 
-    public static void main(String[] args) {
+		Log.info("Parando McIntegrador");
+		stop = true;
+	}
 
-        if (args == null || args.length == 0 || "start".equals(args[0])) {
-            start(args);
-        } else if ("stop".equals(args[0])) {
-            stop(args);
-        }
-    }
+	public static void main(String[] args) {
 
-    public static boolean isStop() {
+		if (args == null || args.length == 0 || "start".equals(args[0])) {
+			start(args);
+		} else if ("stop".equals(args[0])) {
+			stop(args);
+		}
+	}
 
-        return stop;
-    }
+	public static boolean isStop() {
 
-    public static IntegradorBase montaIntegrador() throws Exception {
+		return stop;
+	}
+
+	public static IntegradorBase montaIntegrador() throws Exception {
 
 		return new IntegradorExemplo();
-    }
+	}
 
 }
