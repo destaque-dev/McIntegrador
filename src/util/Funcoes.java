@@ -181,4 +181,13 @@ public class Funcoes {
 		}
 	}
 
+	public static int getInteger(String pValor) {
+
+		try {
+			return Integer.parseInt(pValor);
+		} catch (Exception e) {
+			return -1;
+		}
+	}
+
 }
