@@ -28,6 +28,8 @@ public class Configuracao {
 
 	private String chaveIntegracao;
 
+	private String instancia;
+
 	private int intervaloMinutos;
 
 	private Configuracao() throws Exception {
@@ -66,6 +68,9 @@ public class Configuracao {
 			}
 			if(intervaloMinutos <= 0) {
 				intervaloMinutos = 1; // 1 minuto
+			}
+			if(bundle.containsKey("instancia")) {
+				instancia = bundle.getString("instancia");
 			}
 
 		} catch (Exception e) {
@@ -179,6 +184,16 @@ public class Configuracao {
 
 	public void setIntervaloMinutos(int intervaloMinutos) {
 		this.intervaloMinutos = intervaloMinutos;
+	}
+
+	public String getInstancia() {
+
+		return instancia;
+	}
+
+	public void setInstancia(String instancia) {
+
+		this.instancia = instancia;
 	}
 
 }

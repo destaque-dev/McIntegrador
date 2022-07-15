@@ -11,246 +11,249 @@ import exception.BDException;
 
 public class ConexaoIntegrador {
 
-    private Connection conexao = null;
+	private Connection conexao = null;
 
-    public ConexaoIntegrador() throws Exception {
+	public ConexaoIntegrador() throws Exception {
 
-        super();
+		super();
 
-        String tipoBD = Configuracao.getInstance().getTipoBD();
-        int intTipoBD = TipoBD.validacao(tipoBD);
+		String tipoBD = Configuracao.getInstance().getTipoBD();
+		int intTipoBD = TipoBD.validacao(tipoBD);
 
-        try {
+		try {
 
-            Class.forName(getDriver(intTipoBD));
-            String url = getUrl(intTipoBD, Configuracao.getInstance().getHost(), Configuracao.getInstance().getPorta(),
-                    Configuracao.getInstance().getDataBase());
+			Class.forName(getDriver(intTipoBD));
+			String url = getUrl(intTipoBD, Configuracao.getInstance().getHost(), Configuracao.getInstance().getPorta(),
+					Configuracao.getInstance().getDataBase(), Configuracao.getInstance().getInstancia());
 
-            this.conexao = DriverManager.getConnection(url, Configuracao.getInstance().getLogin(), Configuracao.getInstance().getSenha());
+			this.conexao = DriverManager.getConnection(url, Configuracao.getInstance().getLogin(), Configuracao.getInstance().getSenha());
 
-        } catch (Exception e) {
-            throw new BDException("Erro iniciando conexão", e);
-        }
+		} catch (Exception e) {
+			throw new BDException("Erro iniciando conexão", e);
+		}
 
-        validaConexao(intTipoBD);
-    }
+		validaConexao(intTipoBD);
+	}
 
-    public ConexaoIntegrador(Connection conexao, int tipoConexao) throws BDException {
+	public ConexaoIntegrador(Connection conexao, int tipoConexao) throws BDException {
 
-        this.conexao = conexao;
-        validaConexao(tipoConexao);
+		this.conexao = conexao;
+		validaConexao(tipoConexao);
 
-    }
+	}
 
-    public String getDriver(int tipo) {
+	public String getDriver(int tipo) {
 
-        switch (tipo) {
-            case TipoBD.SQLSERVER:
-                return "net.sourceforge.jtds.jdbc.Driver";
-            case TipoBD.ORACLE:
-            case TipoBD.ORACLE_7:
-            case TipoBD.ORACLE_ODA:
-            case TipoBD.ORACLE_WEB:
-                return "oracle.jdbc.driver.OracleDriver";
-            case TipoBD.POSTGRE:
-                return "org.postgresql.Driver";
-            default:
-                return "";
-        }
-    }
+		switch (tipo) {
+			case TipoBD.SQLSERVER:
+				return "net.sourceforge.jtds.jdbc.Driver";
+			case TipoBD.ORACLE:
+			case TipoBD.ORACLE_7:
+			case TipoBD.ORACLE_ODA:
+			case TipoBD.ORACLE_WEB:
+				return "oracle.jdbc.driver.OracleDriver";
+			case TipoBD.POSTGRE:
+				return "org.postgresql.Driver";
+			default:
+				return "";
+		}
+	}
 
-    public String getUrl(int tipo, String host, String port, String dataBaseName) {
+	public String getUrl(int tipo, String host, String port, String dataBaseName, String instancia) {
 
-    	String url = "";
-    	Log.fatal("TipoBD: " + tipo);
-        switch (tipo) {
-            case TipoBD.SQLSERVER:
-                // Porta default = 1433
-                // return "jdbc:microsoft:sqlserver://" + host + ":" + port + ";DatabaseName=" +
-                // dataBaseName;
-            	url = "jdbc:jtds:sqlserver://" + host + ":" + port + "/" + dataBaseName;
-            	break;
-            case TipoBD.ORACLE_7:
-                // Neste caso, o HOST é o nome para acessar o banco do TNSNAMES.ORA
-            	url = "jdbc:oracle:" + host + ":@" + dataBaseName;
-            	break;
-            case TipoBD.ORACLE:
-            case TipoBD.ORACLE_ODA:
-                // Porta default = 1521
-            	url = "jdbc:oracle:thin:@" + host + ":" + port + "/" + dataBaseName;
-            	break;
-            case TipoBD.ORACLE_WEB:
-            	// Porta default = 1521
-            	url = "jdbc:oracle:thin:@(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = " + host + ")(PORT = " + port + "))"
-        				+ " (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = " + dataBaseName + ") (UR = A) (UR = A)"
-        				+ " (FAILOVER_MODE = (TYPE = select) (METHOD = basic))))";
-            	break;
-            case TipoBD.POSTGRE:
-                // Porta default = 5432
-            	url = "jdbc:postgresql://" + host + ":" + port + "/" + dataBaseName;
-            	break;
-            default:
-            	url = "";
-            	break;
-        }
-        
-        Log.info("url: " + url);
-        return url;
-    }
+		String url = "";
+		Log.fatal("TipoBD: " + tipo);
+		switch (tipo) {
+			case TipoBD.SQLSERVER:
+				// Porta default = 1433
+				// return "jdbc:microsoft:sqlserver://" + host + ":" + port + ";DatabaseName=" +
+				// dataBaseName;
+				url = "jdbc:jtds:sqlserver://" + host + ":" + port + "/" + dataBaseName;
+				if(!Funcoes.isNullOrEmpty(instancia)) {
+					url += ";instance=" + instancia;
+				}
+				break;
+			case TipoBD.ORACLE_7:
+				// Neste caso, o HOST é o nome para acessar o banco do TNSNAMES.ORA
+				url = "jdbc:oracle:" + host + ":@" + dataBaseName;
+				break;
+			case TipoBD.ORACLE:
+			case TipoBD.ORACLE_ODA:
+				// Porta default = 1521
+				url = "jdbc:oracle:thin:@" + host + ":" + port + "/" + dataBaseName;
+				break;
+			case TipoBD.ORACLE_WEB:
+				// Porta default = 1521
+				url = "jdbc:oracle:thin:@(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = " + host + ")(PORT = " + port + "))"
+						+ " (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = " + dataBaseName + ") (UR = A) (UR = A)"
+						+ " (FAILOVER_MODE = (TYPE = select) (METHOD = basic))))";
+				break;
+			case TipoBD.POSTGRE:
+				// Porta default = 5432
+				url = "jdbc:postgresql://" + host + ":" + port + "/" + dataBaseName;
+				break;
+			default:
+				url = "";
+				break;
+		}
 
-    public Connection getConexao() {
+		Log.info("url: " + url);
+		return url;
+	}
 
-        return conexao;
-    }
+	public Connection getConexao() {
 
-    private void validaConexao(int tipoBD) throws BDException {
+		return conexao;
+	}
 
-        try {
-            String query = null;
+	private void validaConexao(int tipoBD) throws BDException {
 
-            switch (tipoBD) {
-                case TipoBD.SQLSERVER:
-                    query = "SELECT 1";
-                    break;
-                case TipoBD.ORACLE:
-                case TipoBD.ORACLE_7:
-                case TipoBD.ORACLE_ODA:
-                case TipoBD.ORACLE_WEB:
-                    query = "SELECT 1 FROM DUAL";
-                    break;
-                case TipoBD.POSTGRE:
-                    query = "SELECT 1";
-                    break;
-            }
-            PreparedStatement st = conexao.prepareStatement(query);
-            st.executeQuery();
-        } catch (SQLException e) {
-            throw new BDException(
-                    "A conexão como banco de dados foi estabelecida, mas a estrutura do banco está inválida pois não foi possível nem mesmo encontrar a tabela de validação.",
-                    e);
-        }
-    }
+		try {
+			String query = null;
 
-    public void close() {
+			switch (tipoBD) {
+				case TipoBD.SQLSERVER:
+					query = "SELECT 1";
+					break;
+				case TipoBD.ORACLE:
+				case TipoBD.ORACLE_7:
+				case TipoBD.ORACLE_ODA:
+				case TipoBD.ORACLE_WEB:
+					query = "SELECT 1 FROM DUAL";
+					break;
+				case TipoBD.POSTGRE:
+					query = "SELECT 1";
+					break;
+			}
+			PreparedStatement st = conexao.prepareStatement(query);
+			st.executeQuery();
+		} catch (SQLException e) {
+			throw new BDException(
+					"A conexão como banco de dados foi estabelecida, mas a estrutura do banco está inválida pois não foi possível nem mesmo encontrar a tabela de validação.",
+					e);
+		}
+	}
 
-        try {
-            if (conexao != null && !conexao.isClosed()) {
-                try {
-                    conexao.rollback();
-                } catch (Exception e) {
-                    Log.error("Não deu o rollback ao liberar a conexao", e);
-                }
-                conexao.close();
-            }
-        } catch (SQLException e) {
-            Log.error("Erro em close de conexão", e);
-        }
+	public void close() {
 
-    }
+		try {
+			if (conexao != null && !conexao.isClosed()) {
+				try {
+					conexao.rollback();
+				} catch (Exception e) {
+					Log.error("Não deu o rollback ao liberar a conexao", e);
+				}
+				conexao.close();
+			}
+		} catch (SQLException e) {
+			Log.error("Erro em close de conexão", e);
+		}
 
-    public ResultBD executeQuery(String sql, Object... parametros) throws BDException {
+	}
 
-        PreparedStatement st = null;
-        try {
-            st = conexao.prepareStatement(sql);
-            for (int i = 0; i < parametros.length; i++) {
-                st.setObject(i + 1, parametros[i]);
-            }
-            return new ResultBD(st.executeQuery());
-        } catch (SQLException e) {
-            throw new BDException("Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros "
-                    + parametros, e);
-        }
-    }
+	public ResultBD executeQuery(String sql, Object... parametros) throws BDException {
 
-    /**
-     * Executa a query de update utilizando o PreparedStatement. Neste caso a query será escrita
-     * utilizando a notação de parâmetros, e seus parametros deverão ser passados na ordem de
-     * preenchimento na query. Ex: sql = 'update TABELA set CAMPO1 = ? where CAMPO2 = ?';
-     * executeQuery(sql, VALOR_CAMPO1, VALOR_CAMPO2);
-     *
-     * @param sql
-     *            Query de insert a ser executada
-     * @param parametros
-     *            Parametros na ordem em que devem ser preenchidos na query
-     * @throws BDException
-     */
-    public int executeUpdate(String sql, Object... parametros) throws BDException {
+		PreparedStatement st = null;
+		try {
+			st = conexao.prepareStatement(sql);
+			for (int i = 0; i < parametros.length; i++) {
+				st.setObject(i + 1, parametros[i]);
+			}
+			return new ResultBD(st.executeQuery());
+		} catch (SQLException e) {
+			throw new BDException("Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros "
+					+ parametros, e);
+		}
+	}
 
-        PreparedStatement st = null;
-        try {
-            st = conexao.prepareStatement(sql);
-            for (int i = 0; i < parametros.length; i++) {
-                st.setObject(i + 1, parametros[i]);
-            }
-            return st.executeUpdate();
-        } catch (SQLException e) {
-            throw new BDException("Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros "
-                    + parametros, e);
-        } finally {
-            closeStatement(st);
-        }
-    }
+	/**
+	 * Executa a query de update utilizando o PreparedStatement. Neste caso a query será escrita
+	 * utilizando a notação de parâmetros, e seus parametros deverão ser passados na ordem de
+	 * preenchimento na query. Ex: sql = 'update TABELA set CAMPO1 = ? where CAMPO2 = ?';
+	 * executeQuery(sql, VALOR_CAMPO1, VALOR_CAMPO2);
+	 *
+	 * @param sql
+	 *            Query de insert a ser executada
+	 * @param parametros
+	 *            Parametros na ordem em que devem ser preenchidos na query
+	 * @throws BDException
+	 */
+	public int executeUpdate(String sql, Object... parametros) throws BDException {
 
-    public void closeStatement(Statement st) throws BDException {
+		PreparedStatement st = null;
+		try {
+			st = conexao.prepareStatement(sql);
+			for (int i = 0; i < parametros.length; i++) {
+				st.setObject(i + 1, parametros[i]);
+			}
+			return st.executeUpdate();
+		} catch (SQLException e) {
+			throw new BDException("Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros "
+					+ parametros, e);
+		} finally {
+			closeStatement(st);
+		}
+	}
 
-        try {
-            if (st != null) {
-                st.clearWarnings();
-                st.clearBatch();
-                st.close();
-            }
-        } catch (SQLException e) {
-            Log.error("Falha ao fechar Statement.", e);
-        }
-    }
+	public void closeStatement(Statement st) throws BDException {
 
-    public void closeResultBD(ResultBD res) {
+		try {
+			if (st != null) {
+				st.clearWarnings();
+				st.clearBatch();
+				st.close();
+			}
+		} catch (SQLException e) {
+			Log.error("Falha ao fechar Statement.", e);
+		}
+	}
 
-        if (res != null) {
-            res.close();
-        }
-    }
+	public void closeResultBD(ResultBD res) {
 
-    public boolean isTransacaoAberta() throws BDException {
+		if (res != null) {
+			res.close();
+		}
+	}
 
-        try {
-            return !conexao.getAutoCommit();
-        } catch (SQLException e) {
-            throw new BDException("Erro (" + e.getMessage() + ") ao verificar transação .", e);
-        }
-    }
+	public boolean isTransacaoAberta() throws BDException {
 
-    public void iniciarTransacao() throws BDException {
+		try {
+			return !conexao.getAutoCommit();
+		} catch (SQLException e) {
+			throw new BDException("Erro (" + e.getMessage() + ") ao verificar transação .", e);
+		}
+	}
 
-        try {
-            conexao.setAutoCommit(false);
-        } catch (SQLException e) {
-            throw new BDException("Erro (" + e.getMessage() + ") ao iniciar transação .", e);
-        }
-    }
+	public void iniciarTransacao() throws BDException {
 
-    public void rollback() throws BDException {
+		try {
+			conexao.setAutoCommit(false);
+		} catch (SQLException e) {
+			throw new BDException("Erro (" + e.getMessage() + ") ao iniciar transação .", e);
+		}
+	}
 
-        try {
-            if (!conexao.getAutoCommit()) {
-                conexao.rollback();
-                conexao.setAutoCommit(true);
-            }
-        } catch (SQLException e) {
-            throw new BDException("Erro (" + e.getMessage() + ") ao realizar rollback .", e);
-        }
-    }
+	public void rollback() throws BDException {
 
-    public void commit() throws BDException {
+		try {
+			if (!conexao.getAutoCommit()) {
+				conexao.rollback();
+				conexao.setAutoCommit(true);
+			}
+		} catch (SQLException e) {
+			throw new BDException("Erro (" + e.getMessage() + ") ao realizar rollback .", e);
+		}
+	}
 
-        try {
-            if (!conexao.getAutoCommit()) {
-                conexao.commit();
-                conexao.setAutoCommit(true);
-            }
-        } catch (SQLException e) {
-            throw new BDException("Erro (" + e.getMessage() + ") ao realizar commit .", e);
-        }
-    }
+	public void commit() throws BDException {
+
+		try {
+			if (!conexao.getAutoCommit()) {
+				conexao.commit();
+				conexao.setAutoCommit(true);
+			}
+		} catch (SQLException e) {
+			throw new BDException("Erro (" + e.getMessage() + ") ao realizar commit .", e);
+		}
+	}
 }
