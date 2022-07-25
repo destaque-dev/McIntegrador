@@ -3,6 +3,7 @@ package util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -190,6 +191,60 @@ public class ConexaoIntegrador {
 		} catch (SQLException e) {
 			throw new BDException("Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros "
 					+ parametros, e);
+		} finally {
+			closeStatement(st);
+		}
+	}
+
+	/**
+	 * Executa a query de insert utilizando o PreparedStatement. Neste caso a query será escrita
+	 * utilizando a notação de parâmetros, e seus parametros deverão ser passados na ordem de
+	 * preenchimento na query. Ex: sql = 'insert into TABELA (CAMPO1, CAMPO2) values(?, ?)';
+	 * executeQuery(sql, VALOR_CAMPO1, VALOR_CAMPO2);
+	 *
+	 * @param sql
+	 *            Query de insert a ser executada
+	 * @param parametros
+	 *            Parametros na ordem em que devem ser preenchidos na query
+	 * @throws BDException, McFileException
+	 */
+	public void executeInsert(String sql, Object... parametros) throws BDException {
+
+		PreparedStatement st = null;
+		try {
+			st = conexao.prepareStatement(sql);
+			for (int i = 0; i < parametros.length; i++) {
+				st.setObject(i + 1, parametros[i]);
+			}
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new BDException(
+					"Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros " + parametros, e);
+		} finally {
+			closeStatement(st);
+		}
+	}
+
+	public long executeInsertReturnGeneratedKey(String sql, Object... parametros) throws BDException {
+
+		PreparedStatement st = null;
+		try {
+			st = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			for (int i = 0; i < parametros.length; i++) {
+				st.setObject(i + 1, parametros[i]);
+			}
+			st.executeUpdate();
+
+			try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+				if (generatedKeys.next()) {
+					return generatedKeys.getLong(1);
+				}else{
+					return -1;
+				}
+			}
+		} catch (SQLException e) {
+			throw new BDException(
+					"Erro (" + e.getMessage() + ") ao executar :\n" + sql + "\n com parametros " + parametros, e);
 		} finally {
 			closeStatement(st);
 		}
