@@ -190,4 +190,34 @@ public class Funcoes {
 		}
 	}
 
+	public static String trim(String str) {
+		return str == null ? null : str.trim();
+	}
+
+	/**
+	 * <p>Compares two Strings, returning {@code true} if they are equal ignoring
+	 * the case and applying trim</p>
+	 *
+	 * <p>{@code null}s are handled without exceptions. Two {@code null}
+	 * references are considered equal. Comparison is case insensitive.</p>
+	 *
+	 * <pre>
+	 * trimEqualsIgnoreCase(null, null)   = true
+	 * trimEqualsIgnoreCase(null, "abc")  = false
+	 * trimEqualsIgnoreCase("abc", null)  = false
+	 * trimEqualsIgnoreCase("abc  ", "abc") = true
+	 * trimEqualsIgnoreCase("abc", "ABC") = true
+	 * </pre>
+	 *
+	 */
+	public static boolean trimEqualsIgnoreCase(String str1, String str2) {
+		str1 = trim(str1);
+		str2 = trim(str2);
+		if (str1 == null || str2 == null) {
+			return str1 == str2;
+		} else {
+			return str1.equalsIgnoreCase(str2);
+		}
+	}
+
 }
