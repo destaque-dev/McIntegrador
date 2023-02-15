@@ -529,6 +529,9 @@ public abstract class IntegradorBase {
 			conCliente.data(ParametrosIntegracao.PARAM_SITUACAO, clienteJuridicoBean.getSituacao());
 		}
 
+		if(clienteJuridicoBean.getEndereco() != null){
+			conCliente.data(ParametrosIntegracao.PARAM_ENDERECO, clienteJuridicoBean.getEndereco());
+		}
 
 		conCliente.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		conCliente.timeout(0);

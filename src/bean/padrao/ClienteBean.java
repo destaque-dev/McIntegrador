@@ -23,6 +23,8 @@ public class ClienteBean {
     private int codArea;
 
     private int codClienteMcFile;
+    
+    private String endereco;
 
     public String getCodCliente() {
 
@@ -122,5 +124,15 @@ public class ClienteBean {
     public void setCodClienteMcFile(int codClienteMcFile) {
 
         this.codClienteMcFile = codClienteMcFile;
+    }
+    
+    public String getEndereco() {
+
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+
+        this.endereco = endereco;
     }
 }

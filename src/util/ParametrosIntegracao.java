@@ -23,6 +23,8 @@ public class ParametrosIntegracao {
 
 	public static String PARAM_SITUACAO = "situacao";
 
+	public static String PARAM_ENDERECO = "endereco";
+
 
 	/**
 	 * Parametros de assunto

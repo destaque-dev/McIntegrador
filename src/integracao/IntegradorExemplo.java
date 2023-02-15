@@ -115,6 +115,7 @@ public class IntegradorExemplo extends IntegradorBase {
                 String cnpj = res.getString("CNPJ");
                 String tipoCliente = res.getString("TIPO_CLIENTE");
                 String tipoPessoa = res.getString("TIPO_PESSOA");
+                String endereco = res.getString("ENDERECO");
 
                 ClienteBean cliente = new ClienteBean();
 
@@ -124,6 +125,7 @@ public class IntegradorExemplo extends IntegradorBase {
                 cliente.setCnpj(cnpj);
                 cliente.setTipoCliente(tipoCliente);
                 cliente.setTipoPessoa(tipoPessoa);
+                cliente.setEndereco(endereco);
 
                 clientes.add(cliente);
             }
