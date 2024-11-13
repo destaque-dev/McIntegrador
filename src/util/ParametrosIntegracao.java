@@ -56,6 +56,10 @@ public class ParametrosIntegracao {
 	
 	public static String PARAM_OBSERVACAO = "observacao";
 	
+	public static String PARAM_COD_EMPRESA_RELACIONADO = "codEmpresaRelacionado";
+	
+	public static String PARAM_COD_ASSUNTO_RELACIONADO = "codAssuntoRelacionado";
+	
 	public static String CHAMADA_INTEGRA_ASSUNTO = "INTEGRAASSUNTO";
 
 	public static String CHAMADA_INTEGRA_CLIENTE = "INTEGRACLIENTE";

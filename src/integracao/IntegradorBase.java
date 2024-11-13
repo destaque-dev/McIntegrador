@@ -492,6 +492,14 @@ public abstract class IntegradorBase {
 		if(assuntoBean.getObservacao() != null){
 			conAssunto.data(ParametrosIntegracao.PARAM_OBSERVACAO, assuntoBean.getObservacao());
 		}
+		
+		if(assuntoBean.getCodEmpresaRelacionado() != null){
+			conAssunto.data(ParametrosIntegracao.PARAM_COD_EMPRESA_RELACIONADO, assuntoBean.getCodEmpresaRelacionado());
+		}
+		
+		if(assuntoBean.getCodAssuntoRelacionado() != null){
+			conAssunto.data(ParametrosIntegracao.PARAM_COD_ASSUNTO_RELACIONADO, assuntoBean.getCodAssuntoRelacionado());
+		}
 
 		conAssunto.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		conAssunto.timeout(0);

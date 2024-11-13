@@ -45,6 +45,10 @@ public class AssuntoBean {
     private String observacao;
 
     private int codClienteMcFile;
+    
+	private String codAssuntoRelacionado;
+	
+	private String codEmpresaRelacionado;
 
     public String getNomeAssunto() {
 
@@ -235,4 +239,21 @@ public class AssuntoBean {
 
         this.codClienteMcFile = codClienteMcFile;
     }
+
+	public String getCodAssuntoRelacionado() {
+		return codAssuntoRelacionado;
+	}
+
+	public void setCodAssuntoRelacionado(String codAssuntoRelacionado) {
+		this.codAssuntoRelacionado = codAssuntoRelacionado;
+	}
+
+	public String getCodEmpresaRelacionado() {
+		return codEmpresaRelacionado;
+	}
+
+	public void setCodEmpresaRelacionado(String codEmpresaRelacionado) {
+		this.codEmpresaRelacionado = codEmpresaRelacionado;
+	}
+    
 }
