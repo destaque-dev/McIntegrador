@@ -85,9 +85,10 @@ public class ConexaoIntegrador {
 				break;
 			case TipoBD.ORACLE_WEB:
 				// Porta default = 1521
-				url = "jdbc:oracle:thin:@(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = " + host + ")(PORT = " + port + "))"
-						+ " (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = " + dataBaseName + ") (UR = A) (UR = A)"
-						+ " (FAILOVER_MODE = (TYPE = select) (METHOD = basic))))";
+				url = "jdbc:oracle:thin:@(DESCRIPTION=" +
+				    "(ADDRESS=(PROTOCOL=TCP)(HOST=" + host + ")(PORT=" + port + "))" +
+				    "(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=" + dataBaseName + ")))";
+
 				break;
 			case TipoBD.POSTGRE:
 				// Porta default = 5432
