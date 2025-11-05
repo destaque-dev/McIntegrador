@@ -24,7 +24,8 @@ public class ParametrosIntegracao {
 	public static String PARAM_SITUACAO = "situacao";
 
 	public static String PARAM_ENDERECO = "endereco";
-
+	
+	public static String PARAM_ID_AREA_SIGILO = "areaID";
 
 	/**
 	 * Parametros de assunto

@@ -500,6 +500,10 @@ public abstract class IntegradorBase {
 		if(assuntoBean.getCodAssuntoRelacionado() != null){
 			conAssunto.data(ParametrosIntegracao.PARAM_COD_ASSUNTO_RELACIONADO, assuntoBean.getCodAssuntoRelacionado());
 		}
+		
+		if(assuntoBean.getCodArea() > 0) {
+			conAssunto.data(ParametrosIntegracao.PARAM_ID_AREA_SIGILO, String.valueOf(assuntoBean.getCodArea()));			
+		}
 
 		conAssunto.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		conAssunto.timeout(0);
@@ -539,6 +543,10 @@ public abstract class IntegradorBase {
 
 		if(clienteJuridicoBean.getEndereco() != null){
 			conCliente.data(ParametrosIntegracao.PARAM_ENDERECO, clienteJuridicoBean.getEndereco());
+		}
+		
+		if(clienteJuridicoBean.getCodArea() > 0) {
+			conCliente.data(ParametrosIntegracao.PARAM_ID_AREA_SIGILO, String.valueOf(clienteJuridicoBean.getCodArea()));			
 		}
 
 		conCliente.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
